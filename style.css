@@ -45,6 +45,9 @@
 }
 
 /* Modals scrolling on small screens */
+#element-modal {
+    z-index: 70;
+}
 #element-modal-content {
     max-height: 90vh;
     overflow-y: auto;

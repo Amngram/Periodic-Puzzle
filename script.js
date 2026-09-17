@@ -1049,10 +1049,11 @@ function openElementInfo(elData) {
     currentFactIndex = 0;
 
     // Enhanced properties grid
-    const mass = (elementProperties && elementProperties.mass[elData.num]) || '?';
-    const meltRaw = (elementProperties && elementProperties.melt[elData.num]);
+    const props = (typeof elementProperties !== 'undefined') ? elementProperties : null;
+    const mass = (props && props.mass && props.mass[elData.num]) || '?';
+    const meltRaw = (props && props.melt && props.melt[elData.num]);
     const meltTxt = typeof meltRaw === 'number' ? `${meltRaw}°C` : '؟';
-    const groupFaName = (elementProperties && elementProperties.groupFa[elData.cat]) || info.name;
+    const groupFaName = (props && props.groupFa && props.groupFa[elData.cat]) || info.name;
 
     document.getElementById('info-desc').innerHTML = `
         <div class="mb-3">
@@ -1638,11 +1639,11 @@ function showLevelIntro(region, level) {
     const chips = teachEls.map((el, i) => {
         const info = categoryInfo[el.cat] || {};
         return `
-            <span class="teach-element-chip" style="animation-delay:${i * 0.12}s">
+            <span class="teach-element-chip cursor-pointer" style="animation-delay:${i * 0.12}s" onclick="openElementInfo(elementData.find(e=>e.num===${el.num}))">
                 <b class="font-english text-xl" style="color:${info.color}">${el.sym}</b>
                 <span class="text-sm">${el.name}</span>
                 <span class="text-xs text-slate-500 font-english">#${el.num}</span>
-                <button class="teach-locate-btn" onclick="locateTeachElement(${el.num})" title="جای عنصر روی جدول">📍</button>
+                <button class="teach-locate-btn" onclick="event.stopPropagation(); locateTeachElement(${el.num})" title="جای عنصر روی جدول">📍</button>
             </span>
         `;
     }).join('');
