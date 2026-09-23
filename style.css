@@ -923,40 +923,156 @@ body {
    VIBEFARSI COMPONENTS & DESIGN SYSTEM (vibefarsi.ir)
    ============================================================ */
 
-/* VibeFarsi 3D FlipCard */
-.perspective-1200 {
+/* Retro Grid Background (registry/backgrounds/retro-grid.tsx) */
+.retro-grid-bg {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    perspective: 280px;
+    z-index: 0;
+    opacity: 0.55;
+}
+.retro-grid-bg::before {
+    content: '';
+    position: absolute;
+    left: -60%;
+    right: -60%;
+    bottom: 0;
+    top: 35%;
+    transform-origin: bottom center;
+    background-image: 
+        linear-gradient(to right, rgba(6, 182, 212, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(168, 85, 247, 0.15) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: perspective(260px) rotateX(60deg);
+    animation: vf-grid-flow 1.6s linear infinite;
+}
+.retro-grid-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 15%, transparent 0%, rgba(15, 23, 42, 0.85) 60%, #0f172a 100%);
+}
+@keyframes vf-grid-flow {
+    from { background-position: 0 0; }
+    to { background-position: 0 50px; }
+}
+
+/* Gradient Text (registry/animations/gradient-text.tsx) */
+.vf-gradient-title {
+    background: linear-gradient(135deg, #06b6d4 0%, #a855f7 50%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: vf-gradient-pan 6s ease infinite alternate;
+}
+@keyframes vf-gradient-pan {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* Live Badge with Pulse Dot (registry/ui/badge.tsx) */
+.vf-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+.vf-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: vf-pulse-dot 1.8s infinite;
+}
+@keyframes vf-pulse-dot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+/* Spotlight Card (registry/animations/spotlight-card.tsx) */
+.vf-spotlight-card {
+    position: relative;
+    border-radius: 1.5rem;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(51, 65, 85, 0.8);
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.vf-spotlight-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: radial-gradient(240px circle at var(--spot-x, -300px) var(--spot-y, -300px), rgba(6, 182, 212, 0.18), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+.vf-spotlight-card:hover::before {
+    opacity: 1;
+}
+
+/* VibeFarsi 3D FlipCard (Fixed & Tested for all browsers) */
+.vf-flip-container {
     perspective: 1200px;
     -webkit-perspective: 1200px;
-}
-.flip-card-inner {
-    position: relative;
     width: 100%;
+    height: 380px;
+    position: relative;
+    margin: 0.5rem auto;
+    max-width: 480px;
+}
+.vf-flip-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
     transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    border-radius: 1.5rem;
 }
-.flip-card-inner.is-flipped {
+.vf-flip-card.is-flipped {
     transform: rotateY(180deg);
 }
-.flip-card-front,
-.flip-card-back {
-    position: relative;
+.vf-flip-face {
+    position: absolute;
+    inset: 0;
     width: 100%;
+    height: 100%;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border-radius: 1.5rem;
-    transition: box-shadow 0.3s ease;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
+    direction: rtl;
+    background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+    border: 2px solid rgba(51, 65, 85, 0.8);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
 }
-.flip-card-back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.vf-flip-front {
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+.vf-flip-back {
     transform: rotateY(180deg);
+    z-index: 1;
 }
 
-/* VibeFarsi Shine Effect */
+/* VibeFarsi Shine Effect (registry/animations/shine-button.tsx) */
 .vibefarsi-shine {
     position: relative;
     overflow: hidden;
@@ -967,7 +1083,7 @@ body {
     top: 0;
     bottom: 0;
     width: 50%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
     animation: vf-shine 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     pointer-events: none;
 }
@@ -976,7 +1092,7 @@ body {
     100% { transform: translateX(-250%) skewX(-20deg); }
 }
 
-/* VibeFarsi Moving Border Beam */
+/* VibeFarsi Moving Border Beam (registry/animations/border-beam.tsx) */
 .vibefarsi-beam {
     position: relative;
     border-color: transparent !important;
@@ -992,7 +1108,7 @@ body {
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
-    animation: vf-beam-rotate 4s linear infinite;
+    animation: vf-beam-rotate 3.5s linear infinite;
 }
 @property --beam-angle {
     syntax: '<angle>';
@@ -1003,15 +1119,59 @@ body {
     to { --beam-angle: 360deg; }
 }
 
-/* VibeFarsi Shake Animation */
+/* VibeFarsi Shake Animation (registry/animations/error-shake.tsx) */
 .vibefarsi-shake {
     animation: vf-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 @keyframes vf-shake {
-    10%, 90% { transform: translate3d(-2px, 0, 0); }
-    20%, 80% { transform: translate3d(3px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-    40%, 60% { transform: translate3d(4px, 0, 0); }
+    10%, 90% { transform: translate3d(-3px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
+    40%, 60% { transform: translate3d(5px, 0, 0); }
+}
+
+/* Toast Container (registry/ui/toast.tsx) */
+#vf-toast-container {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    pointer-events: none;
+    max-width: 380px;
+    width: calc(100vw - 2.5rem);
+}
+.animate-slide-in {
+    animation: vf-slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes vf-slide-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* VibeFarsi Confetti (registry/animations/confetti.tsx) */
+@keyframes vf-confetti {
+    0% { transform: translate(-50%, 0) translate(0, 0) rotate(0deg); opacity: 1; }
+    40% { transform: translate(-50%, 0) translate(calc(var(--spread-x) * 0.7), var(--peak-y)) rotate(var(--rotate-mid)); opacity: 1; }
+    100% { transform: translate(-50%, 0) translate(var(--spread-x), var(--fall-y)) rotate(var(--rotate)); opacity: 0; }
+}
+
+/* VibeFarsi Stat Widget (registry/ui/stat.tsx) */
+.vf-stat-card {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(51, 65, 85, 0.8);
+    border-radius: 1.25rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+.vf-stat-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 4px 15px -3px rgba(6, 182, 212, 0.15);
 }
 
 /* Duolingo Gamified Adventure Path */

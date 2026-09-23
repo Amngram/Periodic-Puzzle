@@ -1,9 +1,12 @@
 /* Periodic Puzzle — Service Worker (Offline PWA) */
-const CACHE_NAME = 'periodic-puzzle-v3';
+const CACHE_NAME = 'periodic-puzzle-v4';
 const CORE_ASSETS = [
     './',
     './index.html',
     './style.css',
+    './icons.js',
+    './blobatar.js',
+    './duo_learning.js',
     './lucide.min.js',
     './story_map.js',
     './element_facts.js',

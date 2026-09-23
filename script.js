@@ -3,6 +3,13 @@
    LUCIDE ICONS & VIBEFARSI HELPER UTILITIES
    ============================================================ */
 function getIconSvg(name, className = 'w-5 h-5', extraAttrs = '') {
+    if (window.ICONS && window.ICONS[name.toLowerCase().replace(/[^a-z0-9-]/g, '')]) {
+        const cleanName = name.toLowerCase().replace(/[^a-z0-9-]/g, '');
+        const inner = window.ICONS[cleanName] || window.ICONS[cleanName.replace(/-/g, '')] || '';
+        if (inner) {
+            return `<svg xmlns="http://www.w3.org/2000/svg" class="${className}" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extraAttrs}>${inner}</svg>`;
+        }
+    }
     if (!name) return '';
     const pascal = name.split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
     const iconData = (window.lucide && (window.lucide.icons?.[pascal] || window.lucide[pascal]));
@@ -16,7 +23,10 @@ function getIconSvg(name, className = 'w-5 h-5', extraAttrs = '') {
     return `<i data-lucide="${name}" class="${className}"></i>`;
 }
 
-function refreshIcons() {
+function refreshIcons(root = document) {
+    if (window.renderAllIcons) {
+        window.renderAllIcons(root);
+    }
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
         try { window.lucide.createIcons(); } catch (e) {}
     }
@@ -2343,8 +2353,38 @@ window.toggleReviewCardFlip = function() {
     const card = document.getElementById('review-flip-card');
     if (!card) return;
     card.classList.toggle('is-flipped');
+    updateReviewCardSideTabs();
     SFX.click();
 };
+
+window.setReviewCardSide = function(side) {
+    const card = document.getElementById('review-flip-card');
+    if (!card) return;
+    if (side === 'back') {
+        card.classList.add('is-flipped');
+    } else {
+        card.classList.remove('is-flipped');
+    }
+    updateReviewCardSideTabs();
+    SFX.click();
+};
+
+function updateReviewCardSideTabs() {
+    const card = document.getElementById('review-flip-card');
+    if (!card) return;
+    const isFlipped = card.classList.contains('is-flipped');
+    const tabFront = document.getElementById('review-tab-front');
+    const tabBack = document.getElementById('review-tab-back');
+    if (tabFront && tabBack) {
+        if (isFlipped) {
+            tabFront.className = 'px-3 py-1 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white bg-slate-800/80';
+            tabBack.className = 'px-3 py-1 rounded-xl text-xs font-bold transition-all bg-emerald-600 text-white shadow-md';
+        } else {
+            tabFront.className = 'px-3 py-1 rounded-xl text-xs font-bold transition-all bg-emerald-600 text-white shadow-md';
+            tabBack.className = 'px-3 py-1 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white bg-slate-800/80';
+        }
+    }
+}
 
 window.nextReviewElement = function() {
     if (reviewList.length === 0) return;
@@ -2374,13 +2414,16 @@ window.markCurrentElementReview = function(mastered) {
 
     if (mastered) {
         SFX.correct();
+        if (window.launchConfetti) window.launchConfetti();
+        if (window.showToast) window.showToast(`تسلط بر عنصر ${el.name} (${el.sym})!`, 'به لیست عناصر مسلط شده افزوده شد 🌟', 'success');
     } else {
         SFX.wrong();
+        if (window.showToast) window.showToast(`نیاز به تمرین: ${el.name}`, 'این کارت برای یادگیری بیشتر دوباره تکرار خواهد شد', 'warning');
     }
     renderCurrentReviewCard();
     setTimeout(() => {
         nextReviewElement();
-    }, 350);
+    }, 450);
 };
 
 function renderCurrentReviewCard() {
@@ -2440,11 +2483,14 @@ function renderCurrentReviewCard() {
     }
     const nameEl = document.getElementById('rb-name');
     if (nameEl) nameEl.textContent = el.name;
+    const engEl = document.getElementById('rb-english');
+    if (engEl) engEl.textContent = el.en || el.english || el.sym;
     const symBack = document.getElementById('rb-symbol-back');
     if (symBack) {
         symBack.textContent = el.sym;
         symBack.style.color = cat.color;
     }
+    updateReviewCardSideTabs();
 
     let mass = '-';
     let melt = '-';
