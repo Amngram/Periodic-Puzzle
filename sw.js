@@ -1,14 +1,16 @@
 /* Periodic Puzzle — Service Worker (Offline PWA) */
-const CACHE_NAME = 'periodic-puzzle-v2';
+const CACHE_NAME = 'periodic-puzzle-v3';
 const CORE_ASSETS = [
     './',
     './index.html',
     './style.css',
-    './script.js',
+    './lucide.min.js',
     './story_map.js',
+    './element_facts.js',
+    './script.js',
+    './manifest.json',
     './icon.svg',
-    './icon-maskable.svg',
-    './manifest.json'
+    './icon-maskable.svg'
 ];
 
 // Install: pre-cache core assets

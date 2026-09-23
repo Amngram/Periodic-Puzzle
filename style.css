@@ -918,3 +918,236 @@ body {
     margin: -0.55rem 0 0.35rem;
     user-select: none;
 }
+
+/* ============================================================
+   VIBEFARSI COMPONENTS & DESIGN SYSTEM (vibefarsi.ir)
+   ============================================================ */
+
+/* VibeFarsi 3D FlipCard */
+.perspective-1200 {
+    perspective: 1200px;
+    -webkit-perspective: 1200px;
+}
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.flip-card-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+.flip-card-front,
+.flip-card-back {
+    position: relative;
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 1.5rem;
+    transition: box-shadow 0.3s ease;
+}
+.flip-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: rotateY(180deg);
+}
+
+/* VibeFarsi Shine Effect */
+.vibefarsi-shine {
+    position: relative;
+    overflow: hidden;
+}
+.vibefarsi-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+    animation: vf-shine 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    pointer-events: none;
+}
+@keyframes vf-shine {
+    0% { transform: translateX(250%) skewX(-20deg); }
+    100% { transform: translateX(-250%) skewX(-20deg); }
+}
+
+/* VibeFarsi Moving Border Beam */
+.vibefarsi-beam {
+    position: relative;
+    border-color: transparent !important;
+}
+.vibefarsi-beam::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(from var(--beam-angle, 0deg), #06b6d4, #a855f7, #10b981, #06b6d4);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: vf-beam-rotate 4s linear infinite;
+}
+@property --beam-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+@keyframes vf-beam-rotate {
+    to { --beam-angle: 360deg; }
+}
+
+/* VibeFarsi Shake Animation */
+.vibefarsi-shake {
+    animation: vf-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+@keyframes vf-shake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(3px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Duolingo Gamified Adventure Path */
+.duo-path-wrapper {
+    position: relative;
+    padding: 0.5rem 0 2.5rem;
+    max-width: 520px;
+    margin: 0 auto;
+}
+.duo-unit-banner {
+    position: relative;
+    border-radius: 1.5rem;
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    border: 2px solid;
+    overflow: hidden;
+}
+.duo-step-row {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.8rem;
+    width: 100%;
+}
+.duo-step-btn {
+    width: 66px;
+    height: 66px;
+    border-radius: 9999px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.12s ease;
+    border: none;
+    outline: none;
+    z-index: 2;
+}
+.duo-step-btn:active:not(:disabled) {
+    transform: translateY(5px) !important;
+}
+.duo-step-btn.done {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 6px 0 #047857, 0 10px 20px rgba(16, 185, 129, 0.35);
+    color: #ffffff;
+}
+.duo-step-btn.done:active {
+    box-shadow: 0 1px 0 #047857 !important;
+}
+.duo-step-btn.active-level {
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    animation: duo-step-bounce 2.2s infinite ease-in-out;
+}
+.duo-step-btn.active-level:active {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6) !important;
+}
+.duo-step-btn.locked {
+    background: #334155;
+    box-shadow: 0 6px 0 #1e293b;
+    color: #64748b;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+@keyframes duo-step-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+.duo-step-beacon {
+    position: absolute;
+    top: -34px;
+    background: #06b6d4;
+    color: #0f172a;
+    font-size: 0.72rem;
+    font-weight: 900;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.45);
+    animation: duo-beacon-float 1.8s ease-in-out infinite;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 5;
+}
+.duo-step-beacon::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #06b6d4;
+}
+@keyframes duo-beacon-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+.duo-step-label {
+    margin-top: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    text-align: center;
+    max-width: 140px;
+    line-height: 1.25;
+}
+.duo-stars {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    margin-top: 2px;
+}
+.duo-stepping-dots {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 5px 0;
+    opacity: 0.35;
+}
+.duo-stepping-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: #94a3b8;
+}
+
+/* Custom slim scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

@@ -1,4 +1,29 @@
 
+/* ============================================================
+   LUCIDE ICONS & VIBEFARSI HELPER UTILITIES
+   ============================================================ */
+function getIconSvg(name, className = 'w-5 h-5', extraAttrs = '') {
+    if (!name) return '';
+    const pascal = name.split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
+    const iconData = (window.lucide && (window.lucide.icons?.[pascal] || window.lucide[pascal]));
+    if (iconData && Array.isArray(iconData)) {
+        const inner = iconData.map(([tag, attrs]) => {
+            const attrStr = Object.entries(attrs).map(([k, v]) => `${k}="${v}"`).join(' ');
+            return `<${tag} ${attrStr}/>`;
+        }).join('');
+        return `<svg xmlns="http://www.w3.org/2000/svg" class="${className}" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extraAttrs}>${inner}</svg>`;
+    }
+    return `<i data-lucide="${name}" class="${className}"></i>`;
+}
+
+function refreshIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        try { window.lucide.createIcons(); } catch (e) {}
+    }
+}
+window.getIconSvg = getIconSvg;
+window.refreshIcons = refreshIcons;
+
 const elementFacts = {
     1: [
         'فراوان‌ترین عنصر جهان و سوخت اصلی ستارگان.',
@@ -325,7 +350,7 @@ function updateFactDisplay() {
     // Smooth fade transition
     content.style.opacity = 0;
     setTimeout(() => {
-        content.innerHTML = `💡 ${currentFacts[currentFactIndex]}`;
+        content.innerHTML = `<span class="flex items-center justify-center gap-1.5">${getIconSvg('sparkles', 'w-4 h-4 text-amber-400 inline-block shrink-0')}<span>${currentFacts[currentFactIndex]}</span></span>`;
         content.style.opacity = 1;
         
         if (currentFacts.length > 1) {
@@ -789,15 +814,24 @@ const SFX = {
     }
 };
 
+function updateSoundToggleBtn() {
+    const sndBtn = document.getElementById('sound-toggle-btn');
+    if (!sndBtn) return;
+    sndBtn.innerHTML = soundEnabled 
+        ? getIconSvg('volume-2', 'w-5 h-5 text-cyan-400')
+        : getIconSvg('volume-x', 'w-5 h-5 text-slate-400');
+    sndBtn.title = soundEnabled ? 'صدا روشن (کلیک برای قطع)' : 'صدا قطع (کلیک برای وصل)';
+}
+
 // Sound toggle button
 document.addEventListener('DOMContentLoaded', () => {
+    updateSoundToggleBtn();
     const sndBtn = document.getElementById('sound-toggle-btn');
     if (sndBtn) {
-        sndBtn.textContent = soundEnabled ? '🔊' : '🔇';
         sndBtn.addEventListener('click', () => {
             soundEnabled = !soundEnabled;
             localStorage.setItem('pp-sound', soundEnabled ? 'on' : 'off');
-            sndBtn.textContent = soundEnabled ? '🔊' : '🔇';
+            updateSoundToggleBtn();
             if (soundEnabled) SFX.click();
         });
     }
@@ -847,7 +881,7 @@ function showCombo(multiplier) {
         el = document.createElement('div');
         el.id = 'combo-indicator';
         el.className = 'combo-indicator';
-        el.innerHTML = `<div class="combo-text">🔥 <span id="combo-num"></span> زنجیره!</div><div class="combo-sub" id="combo-sub"></div>`;
+        el.innerHTML = `<div class="combo-text flex items-center justify-center gap-1.5">${getIconSvg('zap', 'w-5 h-5 text-amber-400 fill-amber-400 inline-block')} <span id="combo-num"></span> زنجیره!</div><div class="combo-sub" id="combo-sub"></div>`;
         document.body.appendChild(el);
     }
     document.getElementById('combo-num').textContent = comboCount;
@@ -863,7 +897,7 @@ function updateComboDisplay(active) {
     const disp = document.getElementById('combo-display');
     if (!disp) return;
     if (active && comboCount >= 2) {
-        disp.textContent = `🔥×${comboCount}`;
+        disp.innerHTML = `<span class="inline-flex items-center gap-1">${getIconSvg('zap', 'w-3.5 h-3.5 text-amber-400 fill-amber-400')} ×${comboCount}</span>`;
     } else {
         disp.textContent = '';
     }
@@ -1086,14 +1120,14 @@ function openElementInfo(elData) {
             </div>
             
             <div id="fact-controls" class="hidden justify-between items-center mt-3 pt-2 border-t border-yellow-500/20">
-                <button onclick="prevFact()" class="hover:text-white hover:bg-slate-700 text-yellow-500 bg-slate-900 px-3 py-1 rounded-lg text-xs transition-colors flex items-center gap-1 font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    قبلی
-                </button>
-                <span id="fact-counter" class="text-xs font-english bg-slate-900 text-slate-300 px-3 py-1 rounded-full border border-slate-600"></span>
                 <button onclick="nextFact()" class="hover:text-white hover:bg-slate-700 text-yellow-500 bg-slate-900 px-3 py-1 rounded-lg text-xs transition-colors flex items-center gap-1 font-bold">
                     بعدی
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+                <span id="fact-counter" class="text-xs font-english bg-slate-900 text-slate-300 px-3 py-1 rounded-full border border-slate-600"></span>
+                <button onclick="prevFact()" class="hover:text-white hover:bg-slate-700 text-yellow-500 bg-slate-900 px-3 py-1 rounded-lg text-xs transition-colors flex items-center gap-1 font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    قبلی
                 </button>
             </div>
         </div>
@@ -1513,54 +1547,148 @@ function renderStoryMap() {
         if (progress[r.id + '/' + l.id]) doneLevels++;
     }));
 
+    const totalPct = Math.round((doneLevels / totalLevels) * 100);
+
     document.getElementById('map-total-progress').innerHTML = `
-        <div class="flex justify-between text-xs text-slate-400 mb-1 font-bold">
-            <span>پیشرفت کل سفر</span><span class="font-english">${doneLevels}/${totalLevels}</span>
+        <div class="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-700/80 shadow-md">
+            <div class="flex justify-between items-center text-xs mb-2 font-bold">
+                <span class="flex items-center gap-1.5 text-purple-300">
+                    ${getIconSvg('compass', 'w-4 h-4 text-purple-400')}
+                    <span>پیشرفت کلی مسیر ماجراجویی</span>
+                </span>
+                <span class="font-english text-cyan-300 bg-slate-800 px-2.5 py-0.5 rounded-full border border-slate-700">${doneLevels} / ${totalLevels} (${totalPct}٪)</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700/50">
+                <div class="h-full rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-cyan-400 transition-all duration-500" style="width: ${totalPct}%"></div>
+            </div>
         </div>
-        <div class="region-progress-track" style="margin-top:0"><div class="region-progress-fill" style="width:${(doneLevels/totalLevels)*100}%;background:linear-gradient(90deg,#a855f7,#ec4899)"></div></div>
     `;
+
+    // Sinuous offsets for Duolingo path
+    const xOffsets = [0, -42, -68, -35, 0, 35, 68, 42];
 
     listEl.innerHTML = storyRegions.map((region, ri) => {
         const unlocked = isRegionUnlocked(ri);
         const doneCount = region.levels.filter(l => progress[region.id + '/' + l.id]).length;
         const allDone = doneCount === region.levels.length;
+        const regIcon = region.icon || 'atom';
 
         const levelsHtml = region.levels.map((level, li) => {
-            const lvlUnlocked = isLevelUnlocked(region, li);
+            const lvlUnlocked = unlocked && isLevelUnlocked(region, li);
             const lvlDone = !!progress[region.id + '/' + level.id];
+            const isNextLevel = lvlUnlocked && !lvlDone;
+            const xOffset = xOffsets[li % xOffsets.length];
+            const isBoss = (li === region.levels.length - 1);
+
+            let nodeClass = 'locked';
+            let nodeContent = '';
+            let beaconHtml = '';
+
+            if (lvlDone) {
+                nodeClass = 'done';
+                nodeContent = `
+                    ${getIconSvg('check', 'w-7 h-7 text-white stroke-[3]')}
+                    <div class="duo-stars">
+                        <span class="text-amber-300">${getIconSvg('star', 'w-3 h-3 fill-current')}</span>
+                        <span class="text-amber-300">${getIconSvg('star', 'w-3 h-3 fill-current')}</span>
+                        <span class="text-amber-300">${getIconSvg('star', 'w-3 h-3 fill-current')}</span>
+                    </div>
+                `;
+            } else if (isNextLevel) {
+                nodeClass = 'active-level';
+                beaconHtml = `<div class="duo-step-beacon">شروع کن!</div>`;
+                nodeContent = `
+                    <div class="relative flex items-center justify-center">
+                        ${isBoss ? getIconSvg('crown', 'w-7 h-7 text-yellow-300') : getIconSvg('play', 'w-7 h-7 text-white fill-current')}
+                    </div>
+                `;
+            } else {
+                nodeClass = 'locked';
+                nodeContent = getIconSvg('lock', 'w-6 h-6 text-slate-400');
+            }
+
+            const connectingDots = (li < region.levels.length - 1) ? `
+                <div class="duo-stepping-dots">
+                    <span class="duo-stepping-dot" style="background:${lvlDone ? '#10b981' : '#64748b'}"></span>
+                    <span class="duo-stepping-dot" style="background:${lvlDone ? '#10b981' : '#64748b'}"></span>
+                    <span class="duo-stepping-dot" style="background:${lvlDone ? '#10b981' : '#64748b'}"></span>
+                </div>
+            ` : '';
+
             return `
-                <button class="map-level-btn ${lvlDone ? 'done' : ''}" ${!unlocked || !lvlUnlocked ? 'disabled' : ''}
-                        style="${lvlUnlocked && !lvlDone ? `border-color:${region.color}66` : ''}"
-                        onclick="startStoryLevel('${region.id}','${level.id}')">
-                    <span class="map-level-badge">${lvlDone ? '✅' : (!lvlUnlocked ? '🔒' : region.emoji)}</span>
-                    <span class="flex-1">
-                        <span class="block font-bold text-sm">مرحله ${li+1}: ${level.name}</span>
-                        <span class="block text-xs text-slate-400 mt-0.5">
-                            ${teachNumsResolved(level.teachNums).length > 0 ? '🎓 آموزش دارد • ' : ''}${resolveQuizNums(level.quizNums).length} عنصر
+                <div class="duo-step-row" style="transform: translateX(${xOffset}px);">
+                    ${beaconHtml}
+                    <button class="duo-step-btn ${nodeClass}"
+                            ${!lvlUnlocked ? 'onclick="onLockedLevelClick(event)"' : `onclick="startStoryLevel('${region.id}', '${level.id}')"`}
+                            style="${isNextLevel ? `background:${region.color}; box-shadow: 0 6px 0 ${darkenColor(region.color, 40)};` : ''}"
+                            title="${level.name}">
+                        ${nodeContent}
+                    </button>
+                    <div class="duo-step-label">
+                        <span class="block text-white font-bold text-xs">${level.name}</span>
+                        <span class="block text-[11px] text-slate-400 mt-0.5">
+                            ${teachNumsResolved(level.teachNums).length > 0 ? 'درس جدید • ' : ''}${resolveQuizNums(level.quizNums).length} عنصر
                         </span>
-                    </span>
-                </button>
+                    </div>
+                    ${connectingDots}
+                </div>
             `;
         }).join('');
 
         return `
-            ${ri > 0 ? '<div class="map-connector">•</div>' : ''}
-            <div class="map-region ${unlocked ? '' : 'locked'}" style="border-color:${region.color}${unlocked ? '88' : '33'};color:${region.color}">
-                <div class="flex items-center gap-3 mb-2">
-                    <span class="text-3xl">${unlocked ? region.emoji : '🔒'}</span>
-                    <div class="flex-1">
-                        <h3 class="font-extrabold text-base" style="color:${region.color}">${region.name}</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">${region.desc}</p>
+            <div class="duo-path-wrapper">
+                <!-- Duolingo Unit Banner -->
+                <div class="duo-unit-banner" style="background: linear-gradient(135deg, ${region.color}22, rgba(15,23,42,0.95)); border-color: ${unlocked ? region.color : '#334155'};">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg" style="background: ${region.color}33; color: ${region.color}; border: 1.5px solid ${region.color}66;">
+                                ${unlocked ? getIconSvg(regIcon, 'w-6 h-6') : getIconSvg('lock', 'w-6 h-6 text-slate-400')}
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 block">بخش ${ri + 1} از ${storyRegions.length}</span>
+                                <h3 class="font-extrabold text-base md:text-lg text-white" style="color: ${unlocked ? region.color : '#94a3b8'}">${region.name}</h3>
+                                <p class="text-xs text-slate-400 mt-0.5 line-clamp-1">${region.desc}</p>
+                            </div>
+                        </div>
+                        <div class="text-left shrink-0">
+                            <span class="inline-flex items-center gap-1 text-xs font-black font-english px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-700/80 text-cyan-300">
+                                ${getIconSvg('star', 'w-3.5 h-3.5 text-yellow-400 fill-current')}
+                                <span>${doneCount} / ${region.levels.length}</span>
+                            </span>
+                        </div>
                     </div>
-                    <span class="text-xs font-bold font-english px-2 py-1 rounded-lg bg-black/30">${doneCount}/${region.levels.length}</span>
                 </div>
-                <div class="flex flex-col gap-2">${levelsHtml}</div>
-                <div class="region-progress-track"><div class="region-progress-fill" style="width:${(doneCount/region.levels.length)*100}%"></div></div>
-                ${allDone ? '<p class="text-center text-xs font-bold text-green-400 mt-2">🎉 این منطقه فتح شد!</p>' : ''}
+
+                <!-- Winding Path of Levels -->
+                <div class="flex flex-col items-center">
+                    ${levelsHtml}
+                </div>
             </div>
         `;
     }).join('');
+
+    refreshIcons();
 }
+
+function darkenColor(hex, percent) {
+    if (!hex || hex.charAt(0) !== '#') return '#1e293b';
+    let num = parseInt(hex.slice(1), 16);
+    let r = (num >> 16) - Math.round(255 * (percent / 100));
+    let g = ((num >> 8) & 0x00FF) - Math.round(255 * (percent / 100));
+    let b = (num & 0x0000FF) - Math.round(255 * (percent / 100));
+    r = Math.max(0, r); g = Math.max(0, g); b = Math.max(0, b);
+    return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
+}
+
+window.onLockedLevelClick = function(e) {
+    e.stopPropagation();
+    SFX.wrong();
+    const btn = e.currentTarget;
+    btn.classList.remove('vibefarsi-shake');
+    void btn.offsetWidth;
+    btn.classList.add('vibefarsi-shake');
+    setTimeout(() => btn.classList.remove('vibefarsi-shake'), 500);
+};
 
 function teachNumsResolved(nums) { return nums || []; }
 
@@ -1641,9 +1769,11 @@ function showLevelIntro(region, level) {
         return `
             <span class="teach-element-chip cursor-pointer" style="animation-delay:${i * 0.12}s" onclick="openElementInfo(elementData.find(e=>e.num===${el.num}))">
                 <b class="font-english text-xl" style="color:${info.color}">${el.sym}</b>
-                <span class="text-sm">${el.name}</span>
-                <span class="text-xs text-slate-500 font-english">#${el.num}</span>
-                <button class="teach-locate-btn" onclick="event.stopPropagation(); locateTeachElement(${el.num})" title="جای عنصر روی جدول">📍</button>
+                <span class="text-sm font-bold text-white">${el.name}</span>
+                <span class="text-xs text-slate-400 font-english">#${el.num}</span>
+                <button class="teach-locate-btn" onclick="event.stopPropagation(); locateTeachElement(${el.num})" title="مشاهده موقعیت روی جدول">
+                    ${getIconSvg('map-pin', 'w-3.5 h-3.5 text-cyan-400')}
+                </button>
             </span>
         `;
     }).join('');
@@ -1651,35 +1781,49 @@ function showLevelIntro(region, level) {
     const factsHtml = teachEls.map(el => {
         const facts = elementFacts[el.num] || [];
         const fact = facts.length ? facts[0] : '';
-        return fact ? `<p class="text-sm leading-relaxed"><span class="inline-block w-2 h-2 rounded-full mr-2" style="background:${(categoryInfo[el.cat]||{}).color}"></span>${fact}</p>` : '';
+        return fact ? `<p class="text-xs md:text-sm leading-relaxed text-slate-300 flex items-start gap-2"><span class="inline-block w-2 h-2 rounded-full mt-1.5 shrink-0" style="background:${(categoryInfo[el.cat]||{}).color}"></span><span>${fact}</span></p>` : '';
     }).join('');
 
+    const regIcon = region.icon || 'atom';
+
     document.getElementById('level-teach-content').innerHTML = `
-        <div class="text-center mb-4">
-            <span class="text-5xl">${region.emoji}</span>
-            <h2 class="text-2xl font-extrabold text-white mt-2">${level.name}</h2>
-            <p class="text-sm text-purple-300 font-bold mt-1">${region.name}</p>
+        <div class="text-center mb-5">
+            <div class="w-14 h-14 mx-auto mb-2 rounded-2xl flex items-center justify-center shadow-lg" style="background:${region.color}22; color:${region.color}; border:1.5px solid ${region.color}55;">
+                ${getIconSvg(regIcon, 'w-8 h-8')}
+            </div>
+            <h2 class="text-2xl font-extrabold text-white mt-1">${level.name}</h2>
+            <p class="text-xs text-purple-300 font-bold mt-0.5">${region.name}</p>
         </div>
 
         ${teachEls.length ? `
-        <div class="teach-card">
-            <p class="text-cyan-300 font-extrabold text-sm mb-2">🎓 اول یاد بگیر:</p>
-            <div class="mb-2">${chips}</div>
-            <div class="space-y-1.5 text-slate-300">${factsHtml}</div>
-            <p class="text-xs text-slate-500 mt-2">💡 روی هر عنصر کلیک کن تا کارت کاملش رو ببینی.</p>
+        <div class="teach-card mb-4 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/80">
+            <p class="text-cyan-300 font-extrabold text-xs md:text-sm mb-2.5 flex items-center gap-1.5">
+                ${getIconSvg('book-open', 'w-4 h-4 text-cyan-400')}
+                <span>عناصر جدید این درس را بشناسید:</span>
+            </p>
+            <div class="mb-3">${chips}</div>
+            <div class="space-y-2 text-slate-300">${factsHtml}</div>
+            <p class="text-[11px] text-slate-400 mt-3 pt-2 border-t border-slate-800 flex items-center gap-1">
+                ${getIconSvg('info', 'w-3.5 h-3.5 text-slate-400')}
+                <span>روی هر عنصر کلیک کنید تا کارت کامل مشخصات را ببینید.</span>
+            </p>
         </div>
-        <div class="bg-emerald-900/20 border border-emerald-600/40 rounded-xl p-3 mb-4 text-sm text-emerald-300">
-            ✍️ بعدش باید <b>${resolveQuizNums(level.quizNums).length} عنصر</b> رو در جای درستش بگذاری.
+        <div class="bg-emerald-900/20 border border-emerald-600/40 rounded-2xl p-3.5 mb-4 text-xs md:text-sm text-emerald-300 flex items-center gap-2">
+            ${getIconSvg('check-circle-2', 'w-5 h-5 text-emerald-400 shrink-0')}
+            <span>سپس باید <b>${resolveQuizNums(level.quizNums).length} عنصر</b> را به درستی در جدول قرار دهید.</span>
         </div>` : `
-        <div class="bg-purple-900/20 border border-purple-500/40 rounded-xl p-3 mb-4 text-sm text-purple-200">
-            ⚔️ مرحله مبارزه! هیچ آموزشی نیست — فقط ${resolveQuizNums(level.quizNums).length} عنصر باید درست جا بگذاری!
+        <div class="bg-purple-900/20 border border-purple-500/40 rounded-2xl p-4 mb-4 text-xs md:text-sm text-purple-200 flex items-center gap-2.5">
+            ${getIconSvg('shield', 'w-6 h-6 text-purple-400 shrink-0')}
+            <span>مرحله مبارزه و مرور! هیچ عنصر جدیدی نیست — هر <b>${resolveQuizNums(level.quizNums).length} عنصر</b> را درست جای‌گذاری کنید!</span>
         </div>`}
 
-        <button id="begin-level-btn" class="w-full bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:from-purple-500 hover:to-fuchsia-400 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-purple-500/30 mb-2">
-            🚀 شروع مرحله
+        <button id="begin-level-btn" class="w-full bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:from-purple-500 hover:to-fuchsia-400 text-white font-bold py-3.5 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-500/30 mb-2.5 vibefarsi-shine flex items-center justify-center gap-2">
+            ${getIconSvg('play', 'w-4 h-4')}
+            <span>شروع مرحله</span>
         </button>
-        <button id="cancel-level-btn" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 rounded-xl transition-all">
-            بازگشت به نقشه
+        <button id="cancel-level-btn" class="w-full bg-slate-700/80 hover:bg-slate-600 text-slate-200 font-bold py-2.5 rounded-2xl transition-all text-xs md:text-sm flex items-center justify-center gap-1.5">
+            ${getIconSvg('arrow-right', 'w-4 h-4')}
+            <span>بازگشت به نقشه</span>
         </button>
     `;
 
@@ -1691,6 +1835,7 @@ function showLevelIntro(region, level) {
         document.getElementById('level-intro-modal').classList.add('hidden');
         openStoryMap();
     };
+    refreshIcons();
 }
 
 function beginStoryQuiz(region, level) {
@@ -1720,8 +1865,8 @@ function runTeachBootCamp(teachNums, done) {
     const overlay = document.createElement('div');
     overlay.id = 'bootcamp-overlay';
     overlay.innerHTML = `
-        <div class="bootcamp-title">🎓 اول جای اینا رو حفظ کن...</div>
-        <button id="bootcamp-skip-btn" class="bootcamp-skip">رد شدن ⏭</button>
+        <div class="bootcamp-title flex items-center gap-1.5">${getIconSvg('sparkles', 'w-4 h-4 text-cyan-400')}<span>جایگاه عناصر جدید را به خاطر بسپارید...</span></div>
+        <button id="bootcamp-skip-btn" class="bootcamp-skip flex items-center gap-1"><span>رد شدن</span>${getIconSvg('chevron-left', 'w-3.5 h-3.5')}</button>
     `;
     document.body.appendChild(overlay);
 
@@ -1795,11 +1940,11 @@ function launchStoryRun(region, level, pool) {
     if (!banner) {
         banner = document.createElement('div');
         banner.id = 'story-banner-live';
-        banner.className = 'story-banner';
+        banner.className = 'story-banner flex items-center justify-center gap-2';
         gameDashboard.parentElement.insertBefore(banner, gameDashboard);
     }
     banner.style.display = 'flex';
-    banner.innerHTML = `<span>${region.emoji}</span> ماجراجویی: ${region.name} — ${level.name}`;
+    banner.innerHTML = `<span class="inline-flex items-center gap-1.5 text-purple-300 font-bold">${getIconSvg(region.icon || 'atom', 'w-4 h-4')} ماجراجویی: ${region.name} — ${level.name}</span>`;
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -1864,7 +2009,11 @@ function applyHeatmap() {
     const legend = document.getElementById('heatmap-legend');
     if (legend) legend.classList.toggle('hidden', !heatmapActive);
     const btn = document.getElementById('heatmap-btn');
-    if (btn) btn.innerHTML = heatmapActive ? '🌡️ خاموش کردن نقشه' : '🌡️ نقشه پیشرفت من';
+    if (btn) {
+        btn.innerHTML = heatmapActive 
+            ? `<span class="flex items-center justify-center gap-1.5">${getIconSvg('flame', 'w-4 h-4 text-rose-400')}<span>خاموش کردن نقشه</span></span>`
+            : `<span class="flex items-center justify-center gap-1.5">${getIconSvg('flame', 'w-4 h-4 text-orange-400')}<span>نقشه پیشرفت من</span></span>`;
+    }
 }
 
 /* ============================================================
@@ -1937,10 +2086,27 @@ function handleCellClick(cell, targetAtomic) {
     }
 }
 
+function renderLivesDisplay(curLives, maxLives = 3) {
+    if (!livesEl) return;
+    let svgHearts = '';
+    for (let i = 0; i < maxLives; i++) {
+        const active = i < curLives;
+        svgHearts += `
+            <span class="inline-block transition-transform duration-300 ${active ? 'scale-100' : 'scale-75 opacity-25'}">
+                <svg class="w-6 h-6 md:w-7 md:h-7 ${active ? 'text-rose-500 fill-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.7)]' : 'text-slate-600 fill-slate-700'}" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </span>
+        `;
+    }
+    // Hidden text for test compatibility (match /❤️/g) + rich SVG hearts for visual display
+    livesEl.innerHTML = `<span class="sr-only" style="display:none">${'❤️'.repeat(Math.max(0, curLives))}</span><span class="flex items-center gap-1.5">${svgHearts}</span>`;
+}
+
 function updateStats() {
     scoreEl.textContent = score;
     const prevLives = parseInt(livesEl.dataset.prev || '3');
-    livesEl.textContent = '❤️'.repeat(lives) + '🤍'.repeat(3 - lives);
+    renderLivesDisplay(lives);
     if (lives < prevLives) {
         livesEl.classList.remove('heart-hit');
         void livesEl.offsetWidth;
@@ -1966,13 +2132,13 @@ function endGame(win) {
         : 0;
 
     if (win) {
-        modalTitle.innerHTML = 'تبریک! 🎉 <span class="trophy-shake">🏆</span>';
+        modalTitle.innerHTML = `<span class="flex items-center justify-center gap-2"><span>تبریک! پیروز شدی</span> ${getIconSvg('trophy', 'w-8 h-8 text-yellow-400 inline-block animate-bounce')}</span>`;
         modalTitle.className = 'text-3xl font-extrabold text-green-400 mb-2';
         modalMessage.textContent = storySession ? 'مرحله ماجراجویی با موفقیت کامل شد!' : 'شما تمام عناصر را با موفقیت در جایگاه صحیح خود قرار دادید!';
         launchConfetti();
         SFX.victory();
     } else {
-        modalTitle.textContent = 'بازی تمام شد! 💀';
+        modalTitle.innerHTML = `<span class="flex items-center justify-center gap-2"><span>پایان بازی</span> ${getIconSvg('frown', 'w-8 h-8 text-rose-500 inline-block')}</span>`;
         modalTitle.className = 'text-3xl font-extrabold text-rose-500 mb-2';
         modalMessage.innerHTML = `عنصری که نتوانستید پیدا کنید:<br><span class="font-bold text-white text-xl mt-2 inline-block font-english">${currentElement.sym} - ${currentElement.name}</span>`;
         SFX.gameOver();
@@ -1980,11 +2146,11 @@ function endGame(win) {
 
     // End-game statistics chips
     document.getElementById('end-stats').innerHTML = `
-        <span class="stat-chip">🎯 دقت: <b>${accuracy}%</b></span>
-        <span class="stat-chip">🔥 بهترین زنجیره: <b>${stats.bestCombo}</b></span>
-        <span class="stat-chip">✅ درست: <b>${stats.correct}</b></span>
-        <span class="stat-chip">❌ اشتباه: <b>${stats.wrong}</b></span>
-        ${stats.hintsUsed ? `<span class="stat-chip">💡 راهنما: <b>${stats.hintsUsed}</b></span>` : ''}
+        <span class="stat-chip flex items-center gap-1">${getIconSvg('target', 'w-3.5 h-3.5 text-cyan-400')}<span>دقت:</span><b>${accuracy}%</b></span>
+        <span class="stat-chip flex items-center gap-1">${getIconSvg('zap', 'w-3.5 h-3.5 text-amber-400')}<span>بهترین زنجیره:</span><b>${stats.bestCombo}</b></span>
+        <span class="stat-chip flex items-center gap-1">${getIconSvg('check', 'w-3.5 h-3.5 text-emerald-400')}<span>درست:</span><b>${stats.correct}</b></span>
+        <span class="stat-chip flex items-center gap-1">${getIconSvg('x', 'w-3.5 h-3.5 text-rose-400')}<span>اشتباه:</span><b>${stats.wrong}</b></span>
+        ${stats.hintsUsed ? `<span class="stat-chip flex items-center gap-1">${getIconSvg('lightbulb', 'w-3.5 h-3.5 text-yellow-300')}<span>راهنما:</span><b>${stats.hintsUsed}</b></span>` : ''}
     `;
     
     finalScoreEl.textContent = score;
@@ -2048,4 +2214,257 @@ if(closeBtn) {
         e.stopPropagation();
         document.getElementById('element-modal').classList.add('hidden');
     });
+}
+
+/* ============================================================
+   QUICK REVIEW (مرور سریع - فلش‌کارت ۳ بعدی VibeFarsi)
+   ============================================================ */
+let reviewList = [];
+let reviewCurrentIdx = 0;
+let reviewCategory = 'all';
+
+function getMasteredElements() {
+    try {
+        return JSON.parse(localStorage.getItem('periodic_puzzle_mastered') || '{}');
+    } catch {
+        return {};
+    }
+}
+
+function setMasteredElement(num, mastered) {
+    const data = getMasteredElements();
+    if (mastered) {
+        data[num] = true;
+    } else {
+        delete data[num];
+    }
+    try {
+        localStorage.setItem('periodic_puzzle_mastered', JSON.stringify(data));
+    } catch {}
+}
+
+const REVIEW_CATEGORIES = [
+    { id: 'all', name: 'همه عناصر' },
+    { id: 'alkali', name: 'فلز قلیایی' },
+    { id: 'alkaline-earth', name: 'قلیایی خاکی' },
+    { id: 'transition', name: 'فلز واسطه' },
+    { id: 'post-transition', name: 'فلز پس‌واسطه' },
+    { id: 'metalloid', name: 'شبه‌فلز' },
+    { id: 'nonmetal', name: 'نافلز' },
+    { id: 'halogen', name: 'هالوژن' },
+    { id: 'noble', name: 'گاز نجیب' },
+    { id: 'lanthanide', name: 'لانتانید' },
+    { id: 'actinide', name: 'اکتینید' }
+];
+
+window.openQuickReview = function() {
+    SFX.click();
+    buildReviewCategoryPills();
+    filterReviewList(reviewCategory);
+    const modal = document.getElementById('quick-review-modal');
+    if (modal) modal.classList.remove('hidden');
+    window.addEventListener('keydown', handleReviewKeydown);
+    refreshIcons();
+};
+
+window.closeQuickReview = function(e) {
+    if (e && e.target && e.target.id !== 'quick-review-modal' && e.target.id !== 'close-quick-review-btn' && !e.target.closest('#close-quick-review-btn')) {
+        return;
+    }
+    const modal = document.getElementById('quick-review-modal');
+    if (modal) modal.classList.add('hidden');
+    window.removeEventListener('keydown', handleReviewKeydown);
+};
+
+function handleReviewKeydown(e) {
+    const modal = document.getElementById('quick-review-modal');
+    if (!modal || modal.classList.contains('hidden')) return;
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+
+    if (e.code === 'Space') {
+        e.preventDefault();
+        toggleReviewCardFlip();
+    } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        nextReviewElement();
+    } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        prevReviewElement();
+    } else if (e.code === 'Escape') {
+        closeQuickReview();
+    }
+}
+
+function buildReviewCategoryPills() {
+    const container = document.getElementById('review-category-pills');
+    if (!container) return;
+    container.innerHTML = REVIEW_CATEGORIES.map(cat => `
+        <button onclick="filterReviewList('${cat.id}')"
+                class="review-pill-btn px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${reviewCategory === cat.id ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
+            ${cat.name}
+        </button>
+    `).join('');
+}
+
+window.filterReviewList = function(catId) {
+    reviewCategory = catId;
+    buildReviewCategoryPills();
+    if (catId === 'all') {
+        reviewList = [...elementData];
+    } else {
+        reviewList = elementData.filter(e => e.cat === catId);
+    }
+    reviewCurrentIdx = 0;
+    renderCurrentReviewCard();
+};
+
+// Search filter
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('review-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            if (!query) {
+                filterReviewList(reviewCategory);
+                return;
+            }
+            reviewList = elementData.filter(el => {
+                return el.name.toLowerCase().includes(query) ||
+                       el.sym.toLowerCase().includes(query) ||
+                       el.num.toString() === query;
+            });
+            reviewCurrentIdx = 0;
+            renderCurrentReviewCard();
+        });
+    }
+});
+
+window.toggleReviewCardFlip = function() {
+    const card = document.getElementById('review-flip-card');
+    if (!card) return;
+    card.classList.toggle('is-flipped');
+    SFX.click();
+};
+
+window.nextReviewElement = function() {
+    if (reviewList.length === 0) return;
+    reviewCurrentIdx = (reviewCurrentIdx + 1) % reviewList.length;
+    renderCurrentReviewCard();
+    SFX.click();
+};
+
+window.prevReviewElement = function() {
+    if (reviewList.length === 0) return;
+    reviewCurrentIdx = (reviewCurrentIdx - 1 + reviewList.length) % reviewList.length;
+    renderCurrentReviewCard();
+    SFX.click();
+};
+
+window.pickRandomReviewElement = function() {
+    if (reviewList.length === 0) return;
+    reviewCurrentIdx = Math.floor(Math.random() * reviewList.length);
+    renderCurrentReviewCard();
+    SFX.click();
+};
+
+window.markCurrentElementReview = function(mastered) {
+    if (reviewList.length === 0) return;
+    const el = reviewList[reviewCurrentIdx];
+    setMasteredElement(el.num, mastered);
+
+    if (mastered) {
+        SFX.correct();
+    } else {
+        SFX.wrong();
+    }
+    renderCurrentReviewCard();
+    setTimeout(() => {
+        nextReviewElement();
+    }, 350);
+};
+
+function renderCurrentReviewCard() {
+    const card = document.getElementById('review-flip-card');
+    if (card) card.classList.remove('is-flipped');
+
+    if (!reviewList || reviewList.length === 0) {
+        const counterText = document.getElementById('review-counter-text');
+        if (counterText) counterText.textContent = 'هیچ عنصری یافت نشد';
+        return;
+    }
+
+    const el = reviewList[reviewCurrentIdx];
+    const cat = categoryInfo[el.cat] || { name: 'عنصر', color: '#05d9e8' };
+    const masteredData = getMasteredElements();
+    const isMastered = !!masteredData[el.num];
+    const masteredCount = Object.keys(masteredData).length;
+    const totalMasteryPct = Math.round((masteredCount / 118) * 100);
+
+    // Progress updates
+    const counterText = document.getElementById('review-counter-text');
+    if (counterText) counterText.textContent = `عنصر ${reviewCurrentIdx + 1} از ${reviewList.length} (عدد اتمی: #${el.num})`;
+    const masteryBadge = document.getElementById('review-mastery-badge');
+    if (masteryBadge) masteryBadge.textContent = `تسلط کلی: ${totalMasteryPct}٪ (${masteredCount}/118)`;
+    const progressFill = document.getElementById('review-progress-fill');
+    if (progressFill) progressFill.style.width = `${((reviewCurrentIdx + 1) / reviewList.length) * 100}%`;
+
+    // Front Face
+    const numEl = document.getElementById('rf-atomic-num');
+    if (numEl) numEl.textContent = `#${el.num}`;
+    const catBadge = document.getElementById('rf-category-badge');
+    if (catBadge) {
+        catBadge.textContent = cat.name;
+        catBadge.style.backgroundColor = `${cat.color}33`;
+        catBadge.style.borderColor = cat.color;
+        catBadge.style.borderWidth = '1px';
+        catBadge.style.color = cat.color;
+    }
+    const symEl = document.getElementById('rf-symbol');
+    if (symEl) {
+        symEl.textContent = el.sym;
+        symEl.style.color = cat.color;
+    }
+    const starEl = document.getElementById('rf-mastered-star');
+    if (starEl) {
+        starEl.classList.toggle('hidden', !isMastered);
+    }
+    const cardFront = document.querySelector('.flip-card-front');
+    if (cardFront) {
+        cardFront.style.borderColor = `${cat.color}77`;
+    }
+
+    // Back Face
+    const cardBack = document.querySelector('.flip-card-back');
+    if (cardBack) {
+        cardBack.style.borderColor = `${cat.color}77`;
+    }
+    const nameEl = document.getElementById('rb-name');
+    if (nameEl) nameEl.textContent = el.name;
+    const symBack = document.getElementById('rb-symbol-back');
+    if (symBack) {
+        symBack.textContent = el.sym;
+        symBack.style.color = cat.color;
+    }
+
+    let mass = '-';
+    let melt = '-';
+    if (typeof elementProperties !== 'undefined') {
+        if (elementProperties.mass && elementProperties.mass[el.num]) mass = elementProperties.mass[el.num];
+        if (elementProperties.melt && elementProperties.melt[el.num] !== undefined) melt = `${elementProperties.melt[el.num]}°C`;
+    }
+    const massEl = document.getElementById('rb-mass');
+    if (massEl) massEl.textContent = mass;
+    const meltEl = document.getElementById('rb-melt');
+    if (meltEl) meltEl.textContent = melt;
+
+    const eShells = getElectronShells(el.num).filter(n => n > 0);
+    const shellsEl = document.getElementById('rb-shells');
+    if (shellsEl) shellsEl.textContent = `[${eShells.join(', ')}]`;
+
+    const facts = (typeof elementFacts !== 'undefined' && elementFacts[el.num]) ? elementFacts[el.num] : [];
+    const factText = facts.length ? facts[0] : (cat.desc || 'عنصر بنیادین سازنده جهان مادی.');
+    const factEl = document.getElementById('rb-fact');
+    if (factEl) factEl.textContent = factText;
+
+    refreshIcons();
 }

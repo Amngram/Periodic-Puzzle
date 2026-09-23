@@ -8,7 +8,7 @@
 
 const RAW_REGIONS = [
     {
-        id: 'r1', name: 'دره گازهای سبک', emoji: '🌋', color: '#ff2a6d',
+        id: 'r1', name: 'دره گازهای سبک', icon: 'wind', emoji: '🌋', color: '#ff2a6d',
         desc: 'از اینجا سفر ما شروع می‌شود! با سبک‌ترین عنصر جهان آشنا شو.',
         lv: [
             ['l1', 'آشنایی با هیدروژن', [1]],
@@ -16,7 +16,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r2', name: 'جنگل فلزات سوزان', emoji: '🔥', color: '#ffc857',
+        id: 'r2', name: 'جنگل فلزات سوزان', icon: 'flame', emoji: '🔥', color: '#ffc857',
         desc: 'فلزهایی که با آب منفجر می‌شوند! مواظب باش.',
         lv: [
             ['l1', 'لیتیم و سدیم', [3, 11]],
@@ -28,7 +28,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r3', name: 'جزیره کربن', emoji: '💎', color: '#00ff9f',
+        id: 'r3', name: 'جزیره کربن', icon: 'gem', emoji: '💎', color: '#00ff9f',
         desc: 'الماس، گرافیت و همه موجودات زنده از این خانواده‌اند.',
         lv: [
             ['l1', 'کربن؛ ستاره حیات', [6]],
@@ -43,7 +43,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r4', name: 'تالار هالوژن‌ها', emoji: '🧪', color: '#d90368',
+        id: 'r4', name: 'تالار هالوژن‌ها', icon: 'flask-conical', emoji: '🧪', color: '#d90368',
         desc: 'واکنش‌پذیرترین غیرفلزات دنیا اینجا زندگی می‌کنند.',
         lv: [
             ['l1', 'فلوئور و کلر', [9, 17]],
@@ -52,7 +52,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r5', name: 'قصر گازهای نجیب', emoji: '👑', color: '#a855f7',
+        id: 'r5', name: 'قصر گازهای نجیب', icon: 'crown', emoji: '👑', color: '#a855f7',
         desc: 'گازهای خونسرد که هیچ‌وقت با کسی واکنش نمی‌دهند!',
         lv: [
             ['l1', 'نئون؛ نور شهرها', [10, 18]],
@@ -61,7 +61,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r6', name: 'کارخانه فلزات واسطه', emoji: '🏭', color: '#05d9e8',
+        id: 'r6', name: 'کارخانه فلزات واسطه', icon: 'factory', emoji: '🏭', color: '#05d9e8',
         desc: 'آهن، مس و طلا؛ ستون‌های تمدن بشری!',
         lv: [
             ['l1', 'سه برادر اول', [21, 22, 23]],
@@ -72,7 +72,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r7', name: 'سیرکوش‌های فلزات ناشناخته', emoji: '⚙️', color: '#94a3b8',
+        id: 'r7', name: 'سیرکوش‌های فلزات ناشناخته', icon: 'shield', emoji: '⚙️', color: '#94a3b8',
         desc: 'فلزات نادر و خاکستری؛ معمارهای پنهان تمدن!',
         lv: [
             ['l1', 'روتنیوم، رودیم و پالادیم', [44, 45, 46]],
@@ -84,7 +84,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r8', name: 'اعماق لانتانیدها', emoji: '🔮', color: '#bd00ff',
+        id: 'r8', name: 'اعماق لانتانیدها', icon: 'sparkles', emoji: '🔮', color: '#bd00ff',
         desc: 'رازآلودترین ردیف جدول؛ عناصر کمیاب زمین!',
         lv: [
             ['l1', 'لانتان و سریم', [57, 58]],
@@ -96,7 +96,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r7b', name: 'گنجینه فلزات گران‌بها', emoji: '💎', color: '#e8c547',
+        id: 'r7b', name: 'گنجینه فلزات گران‌بها', icon: 'coins', emoji: '💎', color: '#e8c547',
         desc: 'یاقوت‌های جدول؛ از یتیریم تا پلاتین!',
         lv: [
             ['l1', 'یتیریم و زیرکونیم', [39, 40]],
@@ -108,7 +108,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r9', name: 'راکتور اکتینیدها', emoji: '☢️', color: '#ff8e00',
+        id: 'r9', name: 'راکتور اکتینیدها', icon: 'atom', emoji: '☢️', color: '#ff8e00',
         desc: 'عناصر رادیواکتیو و پرقدرت؛ احتیاط لازم است!',
         lv: [
             ['l1', 'اکتینیم و توریم', [90]],
@@ -119,7 +119,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r10', name: 'مرز عناصر مصنوعی', emoji: '🛸', color: '#00c2ff',
+        id: 'r10', name: 'مرز عناصر مصنوعی', icon: 'rocket', emoji: '🛸', color: '#00c2ff',
         desc: 'عنصرهایی که فقط در شتاب‌دهنده‌ها متولد می‌شوند!',
         lv: [
             ['l1', 'مندلیفیم و نوبلیم', [101, 102]],
@@ -130,7 +130,7 @@ const RAW_REGIONS = [
         ]
     },
     {
-        id: 'r11', name: 'قله نهایی جدول', emoji: '🏆', color: '#eab308',
+        id: 'r11', name: 'قله نهایی جدول', icon: 'trophy', emoji: '🏆', color: '#eab308',
         desc: 'آزمون نهایی! کل جدول منتظر توست قهرمان.',
         lv: [
             ['l1', 'مبارزه نیمه اول', []],
@@ -156,6 +156,7 @@ function computeCumulativeQuiz(regionIdx, levelIdx) {
 const storyRegions = RAW_REGIONS.map((region, ri) => ({
     id: region.id,
     name: region.name,
+    icon: region.icon || 'atom',
     emoji: region.emoji,
     color: region.color,
     desc: region.desc,

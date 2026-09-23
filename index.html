@@ -4,137 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>آزمون پازل جدول تناوبی</title>
-    <!-- Tailwind CSS (similar to target site) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="stylesheet" href="style.css">
+    <!-- Local offline Lucide icons -->
+    <script src="lucide.min.js"></script>
 </head>
-<body class="bg-slate-900 min-h-screen text-slate-100 font-vazirmatn">
+<body class="bg-slate-900 min-h-screen text-slate-100 font-vazirmatn antialiased selection:bg-cyan-500 selection:text-white">
 
     <!-- Sound toggle -->
-    <div id="sound-toggle-btn" title="صدا روشن/خاموش">🔊</div>
+    <div id="sound-toggle-btn" title="صدا روشن/خاموش" class="cursor-pointer flex items-center justify-center transition-all hover:scale-105 active:scale-95">
+        <i data-lucide="volume-2" id="sound-icon" class="w-5 h-5 text-cyan-400"></i>
+    </div>
 
     <!-- Welcome Modal -->
-    <div id="welcome-modal" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4 transition-opacity duration-500">
-        <div class="bg-slate-800 border-2 border-cyan-500 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl shadow-cyan-500/20">
+    <div id="welcome-modal" class="fixed inset-0 bg-slate-900/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 transition-opacity duration-500">
+        <div class="bg-slate-800 border-2 border-cyan-500/80 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl shadow-cyan-500/20 relative overflow-hidden">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <i data-lucide="atom" class="w-9 h-9"></i>
+            </div>
             <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2">پازل جدول تناوبی</h1>
-            <p class="text-slate-400 mb-8">برای ورود به سایت و ثبت امتیازات، لطفاً نام خود را وارد کنید.</p>
+            <p class="text-slate-400 mb-6 text-sm">برای شروع یادگیری و ماجراجویی، لطفاً نام خود را وارد کنید:</p>
             <input type="text" id="player-name-input" placeholder="نام شما..." class="w-full bg-slate-900 text-white font-vazirmatn px-4 py-3 rounded-xl border border-slate-600 focus:outline-none focus:border-cyan-500 mb-4 text-center text-lg transition-colors">
-            <button id="submit-name-btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-cyan-500/30">
-                ورود به سایت
+            <button id="submit-name-btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-cyan-500/30 vibefarsi-shine flex items-center justify-center gap-2">
+                <span>ورود و شروع بازی</span>
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
             </button>
         </div>
     </div>
 
-
-    
-
     <div id="main-content" class="pb-12">
         <div class="pt-8 md:pt-12 pb-4 px-4 text-center container mx-auto relative">
-            
-
-            <h1 class="text-2xl md:text-5xl font-extrabold mb-4 text-white">پازل جدول تناوبی</h1>
-            <p class="max-w-2xl mx-auto text-sm md:text-lg text-slate-400 mb-8">عناصر ۸ گروه اصلی را در جایگاه صحیح خود قرار دهید.</p>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold mb-3">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>آموزش تعاملی و پازل عناصر</span>
+            </div>
+            <h1 class="text-2xl md:text-5xl font-extrabold mb-3 text-white tracking-tight">پازل جدول تناوبی</h1>
+            <p class="max-w-2xl mx-auto text-sm md:text-lg text-slate-400 mb-6">عناصر ۸ گروه اصلی را در جایگاه صحیح خود قرار دهید یا در مپ ماجراجویی مهارت خود را بسنجید.</p>
             
             <!-- Setup Instructions for selecting custom elements -->
-            <div id="selection-instruction" class="max-w-2xl mx-auto text-sm text-cyan-400 bg-slate-800/80 border border-slate-700 p-4 rounded-xl mb-4 text-center hidden flex flex-col gap-3">
-                <p class="font-bold">👈 روی عناصر در جدول زیر کلیک کنید تا به رنگ سبز درآیند و در آزمون شما قرار گیرند. (عناصر بدون رنگ در آزمون نخواهند بود)</p>
+            <div id="selection-instruction" class="max-w-2xl mx-auto text-sm text-cyan-300 bg-slate-800/90 border border-slate-700/80 p-4 rounded-2xl mb-4 text-center hidden flex flex-col gap-3 shadow-lg">
+                <p class="font-bold flex items-center justify-center gap-2">
+                    <i data-lucide="mouse-pointer-click" class="w-5 h-5 text-cyan-400 shrink-0"></i>
+                    <span>روی عناصر در جدول زیر کلیک کنید تا به رنگ سبز درآیند و در آزمون شما قرار گیرند. (عناصر بدون رنگ در آزمون نخواهند بود)</span>
+                </p>
                 <div class="flex gap-4 justify-center mt-1">
-                    <button onclick="selectAllCustom(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded transition-colors font-bold">انتخاب همه</button>
-                    <button onclick="selectAllCustom(false)" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded transition-colors font-bold">پاک کردن همه</button>
+                    <button onclick="selectAllCustom(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3.5 py-1.5 rounded-xl transition-colors font-bold flex items-center gap-1.5 shadow-sm">
+                        <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                        <span>انتخاب همه</span>
+                    </button>
+                    <button onclick="selectAllCustom(false)" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-3.5 py-1.5 rounded-xl transition-colors font-bold flex items-center gap-1.5 shadow-sm">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        <span>پاک کردن همه</span>
+                    </button>
                 </div>
             </div>
 
-            <div id="start-panel" class="max-w-xl mx-auto bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl text-right">
-                <div class="mb-6">
-                    <label class="block text-slate-300 mb-2 font-bold text-center">حالت آزمون:</label>
+            <div id="start-panel" class="max-w-xl mx-auto bg-slate-800/90 backdrop-blur-md p-6 rounded-3xl border border-slate-700 shadow-2xl text-right">
+                <div class="mb-5">
+                    <label class="block text-slate-300 mb-2 font-bold text-center text-sm">حالت آزمون:</label>
                     <div class="flex gap-6 justify-center">
-                        <label class="cursor-pointer flex items-center gap-2 text-white">
-                            <input type="radio" name="mode" value="symbol" checked class="w-5 h-5 accent-cyan-400">
-                            فقط نماد عنصر (مثال: He)
+                        <label class="cursor-pointer flex items-center gap-2 text-white text-sm hover:text-cyan-300 transition-colors">
+                            <input type="radio" name="mode" value="symbol" checked class="w-4 h-4 accent-cyan-400">
+                            <span>فقط نماد عنصر (مثال: He)</span>
                         </label>
-                        <label class="cursor-pointer flex items-center gap-2 text-white">
-                            <input type="radio" name="mode" value="name" class="w-5 h-5 accent-cyan-400">
-                            نام عنصر (مثال: هلیم)
+                        <label class="cursor-pointer flex items-center gap-2 text-white text-sm hover:text-cyan-300 transition-colors">
+                            <input type="radio" name="mode" value="name" class="w-4 h-4 accent-cyan-400">
+                            <span>نام عنصر (مثال: هلیم)</span>
                         </label>
                     </div>
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-slate-300 mb-2 font-bold">محدوده آزمون:</label>
+                <div class="mb-5">
+                    <label class="block text-slate-300 mb-2 font-bold text-sm">محدوده آزمون:</label>
                     <div class="flex gap-4 justify-center">
-                        <label class="cursor-pointer flex items-center gap-2 text-white">
-                            <input type="radio" name="range-select-mode" value="all" checked class="w-5 h-5 accent-cyan-400" onchange="toggleRangeSelectionUI()">
-                            همه عناصر ۸ گروه اصلی (پیش‌فرض)
+                        <label class="cursor-pointer flex items-center gap-2 text-white text-sm hover:text-cyan-300 transition-colors">
+                            <input type="radio" name="range-select-mode" value="all" checked class="w-4 h-4 accent-cyan-400" onchange="toggleRangeSelectionUI()">
+                            <span>همه عناصر ۸ گروه اصلی (پیش‌فرض)</span>
                         </label>
-                        <label class="cursor-pointer flex items-center gap-2 text-white">
-                            <input type="radio" name="range-select-mode" value="custom" class="w-5 h-5 accent-cyan-400" onchange="toggleRangeSelectionUI()">
-                            انتخاب سفارشی روی جدول 🖱️
+                        <label class="cursor-pointer flex items-center gap-2 text-white text-sm hover:text-cyan-300 transition-colors">
+                            <input type="radio" name="range-select-mode" value="custom" class="w-4 h-4 accent-cyan-400" onchange="toggleRangeSelectionUI()">
+                            <span class="flex items-center gap-1.5">
+                                <span>انتخاب سفارشی روی جدول</span>
+                                <i data-lucide="mouse-pointer" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            </span>
                         </label>
                     </div>
                 </div>
 
-                <button id="start-btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/30 mb-3">
-                    شروع آزمون
+                <button id="start-btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-3.5 px-6 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-cyan-500/30 mb-3 vibefarsi-shine flex items-center justify-center gap-2">
+                    <i data-lucide="play" class="w-5 h-5"></i>
+                    <span>شروع آزمون</span>
                 </button>
+
                 <div class="grid grid-cols-2 gap-3 mb-3">
-                    <button id="story-map-btn" class="bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:from-purple-500 hover:to-fuchsia-400 text-white font-bold py-3 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-purple-500/30 text-sm">
-                        🗺️ حالت مپ ماجراجویی
+                    <button id="story-map-btn" class="bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:from-purple-500 hover:to-fuchsia-400 text-white font-bold py-3 px-4 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-500/30 text-sm flex items-center justify-center gap-2">
+                        <i data-lucide="compass" class="w-4 h-4"></i>
+                        <span>ماجراجویی (مپ)</span>
                     </button>
-                    <button id="heatmap-btn" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg text-sm">
-                        🌡️ نقشه پیشرفت من
+                    <button id="quick-review-btn" onclick="openQuickReview()" class="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold py-3 px-4 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-emerald-500/30 text-sm flex items-center justify-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+                        <span>مرور سریع (فلش‌کارت)</span>
                     </button>
                 </div>
-                <div class="mb-4 mt-2 border-t border-slate-700 pt-3">
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button id="heatmap-btn" class="bg-slate-700/80 hover:bg-slate-600 text-white font-bold py-3 px-4 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-md text-sm flex items-center justify-center gap-2 border border-slate-600/50">
+                        <i data-lucide="flame" class="w-4 h-4 text-orange-400"></i>
+                        <span>نقشه پیشرفت من</span>
+                    </button>
+                    <button id="leaderboard-btn" class="bg-slate-700/80 hover:bg-slate-600 text-white font-bold py-3 px-4 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-md text-sm flex items-center justify-center gap-2 border border-slate-600/50">
+                        <i data-lucide="trophy" class="w-4 h-4 text-yellow-400"></i>
+                        <span>جدول امتیازات</span>
+                    </button>
+                </div>
+
+                <div class="mb-2 mt-2 border-t border-slate-700/70 pt-3">
                     <label class="flex items-center justify-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" id="challenge-mode-check" class="w-5 h-5 accent-rose-500">
-                        <span class="text-slate-300 text-sm font-bold">⏱️ چالش زمانی (۱۰ ثانیه برای هر سؤال)</span>
+                        <input type="checkbox" id="challenge-mode-check" class="w-4 h-4 accent-rose-500">
+                        <span class="text-slate-300 text-xs md:text-sm font-bold flex items-center gap-1.5">
+                            <i data-lucide="timer" class="w-4 h-4 text-rose-400"></i>
+                            <span>چالش زمانی (۱۰ ثانیه برای هر سؤال)</span>
+                        </span>
                     </label>
                 </div>
-                <button id="leaderboard-btn" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg">
-                    🏆 جدول امتیازات
-                </button>
             </div>
 
-            <div id="game-dashboard" class="hidden max-w-4xl mx-auto bg-slate-800/80 backdrop-blur-sm p-4 rounded-2xl border border-slate-700 shadow-xl mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div id="game-dashboard" class="hidden max-w-4xl mx-auto bg-slate-800/80 backdrop-blur-md p-5 rounded-3xl border border-slate-700 shadow-2xl mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
                 <!-- Target Element to place -->
-                <div class="flex-1 text-center border-b md:border-b-0 md:border-l border-slate-600 pb-4 md:pb-0 md:pl-6">
-                    <p class="text-slate-400 text-sm mb-2">عنصر مورد نظر را روی جدول کلیک کنید:</p>
-                    <div id="target-element-box" class="target-element-card mx-auto font-english font-bold flex flex-col justify-center items-center">
+                <div class="flex-1 text-center border-b md:border-b-0 md:border-l border-slate-700/80 pb-4 md:pb-0 md:pl-6">
+                    <p class="text-slate-400 text-xs md:text-sm mb-2 font-bold">عنصر مورد نظر را روی جدول کلیک کنید:</p>
+                    <div id="target-element-box" class="target-element-card mx-auto font-english font-bold flex flex-col justify-center items-center vibefarsi-beam">
                         <span id="target-symbol" class="text-3xl md:text-4xl leading-none">?</span>
                     </div>
-                    <p id="target-name" class="text-slate-300 text-xs mt-2 min-h-[20px]"></p>
+                    <p id="target-name" class="text-slate-200 text-xs mt-2 min-h-[20px] font-bold"></p>
                 </div>
 
                 <!-- Stats -->
                 <div class="flex-1 flex justify-around w-full">
                     <div class="text-center">
-                        <p class="text-slate-400 text-sm">امتیاز</p>
+                        <p class="text-slate-400 text-xs md:text-sm mb-1">امتیاز</p>
                         <p id="score" class="text-2xl font-bold text-cyan-400 font-english">0</p>
                         <p id="combo-display" class="text-xs font-bold text-orange-400 h-4 font-english"></p>
                     </div>
                     <div class="text-center">
-                        <p class="text-slate-400 text-sm">زمان</p>
+                        <p class="text-slate-400 text-xs md:text-sm mb-1">زمان</p>
                         <p id="timer" class="text-2xl font-bold text-white font-english">00:00</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-slate-400 text-sm">جان‌ها</p>
-                        <p id="lives" class="text-2xl font-bold text-rose-500">❤️❤️❤️</p>
+                        <p class="text-slate-400 text-xs md:text-sm mb-1">جان‌ها</p>
+                        <div id="lives" class="flex items-center justify-center gap-1 min-h-[30px]"></div>
                     </div>
                 </div>
+
                 <!-- Hint & exit buttons -->
                 <div class="flex flex-col gap-2 items-stretch">
-                    <button id="hint-btn" class="bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-2 rounded-lg transition-all shadow-md" title="نمایش راهنما با ۵ امتیاز جریمه">
-                        💡 راهنما <span class="font-english">(-5)</span>
+                    <button id="hint-btn" class="bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5" title="نمایش راهنما با ۵ امتیاز جریمه">
+                        <i data-lucide="lightbulb" class="w-4 h-4 text-yellow-300"></i>
+                        <span>راهنما</span>
+                        <span class="font-english text-[11px]">(-5)</span>
                     </button>
-                    <button id="quit-game-btn" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-bold px-3 py-2 rounded-lg transition-all" title="خروج از بازی">
-                        ✖ خروج
+                    <button id="quit-game-btn" class="bg-slate-700/80 hover:bg-slate-600 text-slate-300 hover:text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5" title="خروج از بازی">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>خروج</span>
                     </button>
                 </div>
             </div>
+
             <!-- Challenge timer bar -->
             <div id="challenge-bar-container" class="hidden max-w-4xl mx-auto px-4 mb-2">
                 <div class="challenge-bar-wrap"><div id="challenge-bar" class="challenge-bar"></div></div>
@@ -145,7 +185,7 @@
             <div class="table-wrapper">
                 <div id="periodic-table" class="periodic-grid" dir="ltr">
                 <!-- Table will be generated here -->
-            </div>
+                </div>
             </div>
             <!-- Heatmap legend (visible when the progress map is on) -->
             <div id="heatmap-legend" class="hidden">
@@ -153,31 +193,31 @@
                 <span><span class="legend-dot" style="background:#ff2a6d"></span> ضعیف</span>
                 <span><span class="legend-dot" style="background:#ffc857"></span> متوسط</span>
                 <span><span class="legend-dot" style="background:#05d9e8"></span> خوب</span>
-                <span><span class="legend-dot" style="background:#00ff9f"></span> استاد! 🎓</span>
+                <span class="flex items-center gap-1"><span class="legend-dot" style="background:#00ff9f"></span> <span>استاد!</span> <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-emerald-400 inline"></i></span>
             </div>
         </div>
     </div>
 
-    
-    <!-- Element Info Modal -->
+    <!-- Element Info Modal (Fixed: Close button is safely at top-left with generous title padding) -->
     <div id="element-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
         <div id="element-modal-content" class="bg-slate-800 border-2 border-slate-600 rounded-3xl p-6 max-w-lg w-full text-center shadow-2xl relative transform transition-all scale-100" onclick="event.stopPropagation()">
-            <button id="close-element-btn" class="absolute top-3 right-3 text-slate-400 hover:text-white bg-slate-700/50 p-2 rounded-full z-10" title="بستن">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <!-- Close button safely on the top-left in RTL -->
+            <button id="close-element-btn" class="absolute top-4 left-4 text-slate-400 hover:text-white hover:bg-slate-700 bg-slate-900/80 border border-slate-700 p-2.5 rounded-full z-20 transition-all shadow-md focus:outline-none" title="بستن">
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="flex justify-between items-center mb-4 mt-4 md:mt-0">
+            <div class="flex justify-between items-center mb-4 mt-1 pe-2 ps-14">
                 <div class="text-right">
-                    <h2 id="info-name" class="text-3xl font-extrabold text-white"></h2>
-                    <p id="info-cat" class="text-sm font-bold mt-1 px-3 py-1 rounded-full inline-block"></p>
+                    <h2 id="info-name" class="text-2xl md:text-3xl font-extrabold text-white"></h2>
+                    <p id="info-cat" class="text-xs md:text-sm font-bold mt-1 px-3 py-1 rounded-full inline-block"></p>
                 </div>
-                <div class="text-left font-english text-5xl font-black" id="info-sym" style="color: var(--c-alkali)"></div>
+                <div class="text-left font-english text-4xl md:text-5xl font-black" id="info-sym" style="color: var(--c-alkali)"></div>
             </div>
             
-            <div class="bg-slate-900 rounded-2xl p-4 mb-4 flex justify-center items-center">
+            <div class="bg-slate-900 rounded-2xl p-4 mb-4 flex justify-center items-center border border-slate-700/50">
                 <div id="bohr-model" class="w-64 h-64"></div>
             </div>
             
-            <div class="bg-slate-700/50 rounded-xl p-4 text-right text-slate-300 text-sm leading-relaxed" id="info-desc">
+            <div class="bg-slate-700/50 rounded-2xl p-4 text-right text-slate-300 text-sm leading-relaxed border border-slate-600/40" id="info-desc">
             </div>
         </div>
     </div>
@@ -186,28 +226,182 @@
     <div id="leaderboard-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div id="leaderboard-modal-content" class="bg-slate-800 border-2 border-yellow-500 rounded-3xl p-6 md:p-8 max-w-md w-full text-center shadow-2xl shadow-yellow-500/20 relative max-h-[85vh] flex flex-col justify-between" onclick="event.stopPropagation()">
             <div>
-                <h2 class="text-3xl font-extrabold text-yellow-400 mb-6">🏆 نفرات برتر</h2>
+                <div class="flex items-center justify-center gap-2 mb-6">
+                    <i data-lucide="trophy" class="w-7 h-7 text-yellow-400"></i>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-yellow-400">نفرات برتر</h2>
+                </div>
                 <div id="leaderboard-list" class="flex flex-col gap-3 font-english text-left overflow-y-auto max-h-[50vh] pr-1">
                     <!-- Scores injected here -->
                 </div>
             </div>
-            <button onclick="document.getElementById('leaderboard-modal').classList.add('hidden')" class="mt-6 w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 rounded-xl transition-all">
+            <button onclick="document.getElementById('leaderboard-modal').classList.add('hidden')" class="mt-6 w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-2xl transition-all shadow-md">
                 بستن
             </button>
         </div>
     </div>
 
-    <!-- Story Map Modal -->
-    <div id="story-map-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div id="story-map-content" class="bg-slate-800 border-2 border-purple-500 rounded-3xl p-6 max-w-lg w-full shadow-2xl shadow-purple-500/20 relative max-h-[88vh] flex flex-col" onclick="event.stopPropagation()">
-            <button id="close-story-map-btn" class="absolute top-3 left-3 text-slate-400 hover:text-white bg-slate-700/50 p-2 rounded-full z-10">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- Duolingo-style Adventure Map Modal -->
+    <div id="story-map-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 md:p-6">
+        <div id="story-map-content" class="bg-slate-800/95 border-2 border-purple-500/80 rounded-3xl p-5 md:p-7 max-w-2xl w-full shadow-2xl shadow-purple-500/25 relative max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
+            <button id="close-story-map-btn" class="absolute top-4 left-4 text-slate-400 hover:text-white bg-slate-900/80 border border-slate-700 p-2.5 rounded-full z-20 transition-all hover:bg-slate-700">
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-purple-300 mb-1 text-center">🗺️ ماجرای جدول تناوبی</h2>
-            <p class="text-slate-400 text-sm text-center mb-4">هر منطقه رو کامل کن تا بعدی باز بشه. از آموزش شروع کن، بعد آزمون بده!</p>
-            <div id="map-total-progress" class="mb-3"></div>
-            <div class="map-scroll" id="story-map-list">
-                <!-- Regions injected here -->
+            <div class="text-center mb-4">
+                <div class="w-12 h-12 mx-auto mb-2 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400">
+                    <i data-lucide="compass" class="w-7 h-7"></i>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-purple-300 mb-1">ماجرای جدول تناوبی</h2>
+                <p class="text-slate-400 text-xs md:text-sm">مسیر یادگیری به سبک دولینگو؛ مراحل را فتح کن تا به قله جدول برسی!</p>
+            </div>
+            <div id="map-total-progress" class="mb-4"></div>
+            <div class="map-scroll overflow-y-auto pr-1 pl-1" id="story-map-list">
+                <!-- Duolingo Winding Path injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Review Modal (VibeFarsi 3D FlipCard) -->
+    <div id="quick-review-modal" class="fixed inset-0 bg-slate-900/95 backdrop-blur-md z-[75] hidden flex items-center justify-center p-3 md:p-6" onclick="closeQuickReview(event)">
+        <div id="quick-review-content" class="bg-slate-800/95 border-2 border-emerald-500/80 rounded-3xl p-4 md:p-6 max-w-xl w-full shadow-2xl shadow-emerald-500/20 relative max-h-[92vh] flex flex-col justify-between" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-slate-700/80 pb-3 mb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg md:text-xl font-extrabold text-white">مرور سریع و فلش‌کارت عناصر</h2>
+                        <p class="text-xs text-slate-400">کلیک روی کارت برای چرخش ۳ بعدی و مشاهده مشخصات</p>
+                    </div>
+                </div>
+                <button id="close-quick-review-btn" onclick="closeQuickReview()" class="text-slate-400 hover:text-white bg-slate-700/60 hover:bg-slate-700 p-2.5 rounded-full transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Category Filter Bar & Search -->
+            <div class="mb-3 space-y-2">
+                <div class="flex gap-2 items-center">
+                    <div class="relative flex-1">
+                        <input type="text" id="review-search-input" placeholder="جستجوی عنصر (نام، نماد، عدد)..." class="w-full bg-slate-900/90 text-white text-xs md:text-sm px-3 py-2 pe-8 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500">
+                        <span class="absolute left-2.5 top-2.5 text-slate-500 pointer-events-none">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                    <button onclick="pickRandomReviewElement()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap shadow-sm" title="عنصر تصادفی">
+                        <i data-lucide="shuffle" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span>تصادفی</span>
+                    </button>
+                </div>
+                <!-- Filter Pills -->
+                <div id="review-category-pills" class="flex gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
+                    <!-- Dynamic Category buttons -->
+                </div>
+            </div>
+
+            <!-- Mastery Progress Bar -->
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-2 font-bold px-1">
+                <span id="review-counter-text">عنصر ۱ از ۱۱۸</span>
+                <span id="review-mastery-badge" class="text-emerald-400 font-english">تسلط: ۰٪</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-2 mb-4 overflow-hidden border border-slate-700/60">
+                <div id="review-progress-fill" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-300" style="width: 1%"></div>
+            </div>
+
+            <!-- VibeFarsi 3D FlipCard -->
+            <div class="perspective-1200 w-full my-auto py-1">
+                <div id="review-flip-card" class="flip-card-inner cursor-pointer" onclick="toggleReviewCardFlip()">
+                    <!-- Front Face -->
+                    <div id="rf-card-front" class="flip-card-front bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-2 rounded-3xl p-6 flex flex-col justify-between items-center text-center shadow-2xl relative overflow-hidden select-none min-h-[250px] md:min-h-[280px]">
+                        <!-- Top details -->
+                        <div class="w-full flex justify-between items-center">
+                            <span id="rf-atomic-num" class="text-xs font-english font-black px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-cyan-300">#1</span>
+                            <span id="rf-category-badge" class="text-xs font-bold px-3 py-1 rounded-full text-white">نافلز</span>
+                            <span id="rf-mastered-star" class="text-xs text-amber-400 hidden">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </span>
+                        </div>
+                        <!-- Center Symbol -->
+                        <div class="my-auto py-2">
+                            <div id="rf-symbol" class="text-6xl md:text-7xl font-black font-english tracking-tight drop-shadow-[0_0_20px_currentColor]">H</div>
+                            <p class="text-xs text-slate-400 mt-2 font-medium">نام و ویژگی‌های این عنصر را به خاطر دارید؟</p>
+                        </div>
+                        <!-- Bottom Hint / Flip prompt -->
+                        <div class="w-full flex items-center justify-center gap-1.5 text-xs text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 py-2 px-3 rounded-xl">
+                            <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                            <span>برای دیدن مشخصات کلیک کنید (یا کلید Space)</span>
+                        </div>
+                    </div>
+
+                    <!-- Back Face -->
+                    <div id="rf-card-back" class="flip-card-back bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-2 rounded-3xl p-5 md:p-6 flex flex-col justify-between text-right shadow-2xl relative overflow-hidden select-none min-h-[250px] md:min-h-[280px]">
+                        <!-- Back Header -->
+                        <div class="flex justify-between items-start border-b border-slate-700/60 pb-2">
+                            <div>
+                                <h3 id="rb-name" class="text-2xl font-black text-white">هیدروژن</h3>
+                                <p id="rb-english" class="text-xs text-slate-400 font-english">Hydrogen</p>
+                            </div>
+                            <div class="text-left font-english text-3xl font-black" id="rb-symbol-back">H</div>
+                        </div>
+                        <!-- Key Properties Grid -->
+                        <div class="grid grid-cols-3 gap-2 my-2 text-center text-xs">
+                            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-700/50">
+                                <span class="text-slate-400 block text-[11px] mb-0.5">جرم اتمی</span>
+                                <span id="rb-mass" class="font-english font-bold text-white text-sm">1</span>
+                            </div>
+                            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-700/50">
+                                <span class="text-slate-400 block text-[11px] mb-0.5">نقطه ذوب</span>
+                                <span id="rb-melt" class="font-english font-bold text-white text-sm">-259°C</span>
+                            </div>
+                            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-700/50">
+                                <span class="text-slate-400 block text-[11px] mb-0.5">لایه‌های الکترونی</span>
+                                <span id="rb-shells" class="font-english font-bold text-cyan-300 text-sm">[1]</span>
+                            </div>
+                        </div>
+                        <!-- Fact Snippet -->
+                        <div class="bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-xl text-xs text-amber-200 leading-relaxed">
+                            <span class="font-bold text-amber-400 flex items-center gap-1 mb-1">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                <span>نکته شگفت‌انگیز:</span>
+                            </span>
+                            <p id="rb-fact">فراوان‌ترین عنصر جهان و سوخت اصلی ستارگان.</p>
+                        </div>
+                        <!-- Flip Back Prompt -->
+                        <div class="text-center text-[11px] text-slate-500 mt-1">
+                            کلیک برای بازگشت به روی کارت
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Controls -->
+            <div class="mt-3 pt-3 border-t border-slate-700/80 flex flex-col gap-2.5">
+                <!-- Navigation -->
+                <div class="flex justify-between items-center gap-2">
+                    <button onclick="prevReviewElement()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-sm">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        <span>عنصر قبلی</span>
+                    </button>
+                    <button onclick="toggleReviewCardFlip()" class="bg-emerald-600/85 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-md">
+                        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                        <span>چرخش</span>
+                    </button>
+                    <button onclick="nextReviewElement()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-sm">
+                        <span>عنصر بعدی</span>
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <!-- Mastery Feedback Buttons -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="mark-need-practice-btn" onclick="markCurrentElementReview(false)" class="bg-slate-800/90 hover:bg-rose-900/30 text-rose-300 border border-rose-500/30 font-bold py-2 px-3 rounded-xl transition-all text-xs flex items-center justify-center gap-1.5">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-rose-400"></i>
+                        <span>نیاز به تمرین</span>
+                    </button>
+                    <button id="mark-mastered-btn" onclick="markCurrentElementReview(true)" class="bg-slate-800/90 hover:bg-emerald-900/30 text-emerald-300 border border-emerald-500/30 font-bold py-2 px-3 rounded-xl transition-all text-xs flex items-center justify-center gap-1.5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span>این رو بلدم!</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -219,7 +413,7 @@
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- Game Over Modal -->
     <div id="game-over-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-800 border-2 border-cyan-500 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl shadow-cyan-500/20 transform transition-all scale-100">
             <h2 id="modal-title" class="text-3xl font-extrabold text-white mb-2">پایان بازی</h2>
@@ -231,15 +425,13 @@
                 </div>
             </div>
             <div id="end-stats" class="stat-chips mb-4"></div>
-            <button id="restart-btn" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-400 hover:to-pink-400 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-rose-500/30">
-                شروع مجدد
+            <button id="restart-btn" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-400 hover:to-pink-400 text-white font-bold py-3.5 px-6 rounded-2xl transition-all shadow-lg shadow-rose-500/30 vibefarsi-shine flex items-center justify-center gap-2">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                <span>شروع مجدد</span>
             </button>
         </div>
     </div>
 
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
     <script src="story_map.js"></script>
     <script src="script.js"></script>
     <script>
