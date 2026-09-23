@@ -70,28 +70,12 @@
 .periodic-grid {
     display: grid;
     /* Base size that looks good and readable, never shrink below this */
-    grid-template-columns: repeat(18, minmax(40px, 1fr));
-    gap: 0.2rem;
+    grid-template-columns: repeat(18, minmax(44px, 1fr));
+    gap: 0.22rem;
     position: relative;
     padding: 0.5rem;
     width: max-content; /* Force width based on content */
     margin: 0 auto;
-}
-
-@media (max-width: 640px) {
-    .periodic-grid {
-        grid-template-columns: repeat(18, minmax(38px, 1fr)) !important;
-        gap: 0.15rem !important;
-        padding: 0.35rem 0.2rem !important;
-    }
-}
-
-@media (max-width: 420px) {
-    .periodic-grid {
-        grid-template-columns: repeat(18, minmax(35px, 1fr)) !important;
-        gap: 0.12rem !important;
-        padding: 0.25rem 0.15rem !important;
-    }
 }
 
 @media (min-width: 768px) {
@@ -180,45 +164,13 @@ body {
 }
 
 .element .name {
-    font-size: 0.55rem;
+    font-size: 0.52rem;
     font-weight: 600;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     opacity: 0.9;
-}
-
-@media (max-width: 640px) {
-    .element {
-        border-radius: 0.4rem !important;
-        padding: 0.15rem 0.1rem !important;
-    }
-    .element .number {
-        font-size: 0.52rem !important;
-        line-height: 1 !important;
-    }
-    .element .symbol {
-        font-size: 0.95rem !important;
-        line-height: 1 !important;
-    }
-    .element .name {
-        font-size: 0.44rem !important;
-        line-height: 1 !important;
-        letter-spacing: -0.02em !important;
-    }
-}
-
-@media (max-width: 420px) {
-    .element .number {
-        font-size: 0.48rem !important;
-    }
-    .element .symbol {
-        font-size: 0.88rem !important;
-    }
-    .element .name {
-        font-size: 0.4rem !important;
-    }
 }
 
 /* Category Glow & Color Tokens */
@@ -1090,108 +1042,7 @@ body {
     box-shadow: 0 0 24px rgba(168, 85, 247, 0.25);
 }
 
-/* Responsive Sticky HUD on Mobile for #game-dashboard */
-@media (max-width: 768px) {
-    #game-dashboard {
-        position: sticky;
-        top: 0.5rem;
-        z-index: 40;
-        padding: 0.6rem 0.75rem !important;
-        margin-bottom: 0.75rem !important;
-        border-radius: 1.25rem !important;
-        background: rgba(15, 23, 42, 0.96) !important;
-        backdrop-filter: blur(16px) !important;
-        -webkit-backdrop-filter: blur(16px) !important;
-        border: 2px solid rgba(14, 165, 233, 0.4) !important;
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75), 0 0 20px rgba(14, 165, 233, 0.2) !important;
-        gap: 0.5rem !important;
-    }
-    
-    .dashboard-main-row {
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        gap: 0.5rem !important;
-    }
 
-    .dashboard-target-wrap {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 0.5rem !important;
-        border: none !important;
-        padding: 0 !important;
-        flex: none !important;
-        width: auto !important;
-        text-align: right !important;
-    }
-    .target-element-card {
-        width: 56px !important;
-        height: 56px !important;
-        border-radius: 0.85rem !important;
-        border-width: 2px !important;
-    }
-    .target-element-card #target-symbol {
-        font-size: 1.35rem !important;
-    }
-    #target-name {
-        font-size: 0.75rem !important;
-        max-width: 85px !important;
-        line-height: 1.2 !important;
-        text-align: right !important;
-        margin-top: 0 !important;
-    }
-
-    .dashboard-stats-grid {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 0.35rem !important;
-        flex: 1 !important;
-        width: auto !important;
-    }
-    .dashboard-stats-grid .vf-stat-card {
-        padding: 0.3rem 0.4rem !important;
-        border-radius: 0.75rem !important;
-    }
-    .dashboard-stats-grid .vf-stat-card span.text-\[10px\],
-    .dashboard-stats-grid .vf-stat-card span.text-\[11px\] {
-        display: none !important;
-    }
-    .dashboard-stats-grid .vf-stat-card p.text-lg,
-    .dashboard-stats-grid .vf-stat-card p.text-2xl {
-        font-size: 1rem !important;
-        line-height: 1.2 !important;
-    }
-    .dashboard-stats-grid .vf-stat-card #lives svg {
-        width: 17px !important;
-        height: 17px !important;
-    }
-
-    .dashboard-controls-wrap {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 0.35rem !important;
-        width: auto !important;
-    }
-    .dashboard-controls-wrap button {
-        padding: 0.45rem 0.6rem !important;
-        border-radius: 0.75rem !important;
-        font-size: 0.7rem !important;
-    }
-    .dashboard-controls-wrap button span:not([data-icon]) {
-        display: none;
-    }
-
-    .dashboard-progress-wrap {
-        margin-top: 0 !important;
-    }
-    .dashboard-progress-wrap .text-\[10px\],
-    .dashboard-progress-wrap .text-\[11px\] {
-        font-size: 0.65rem !important;
-        margin-bottom: 0.2rem !important;
-    }
-}
 
 /* Region connector arrow on the map */
 .map-connector {
@@ -1812,26 +1663,33 @@ body {
     }
 }
 @media (max-width: 540px) {
+    .duo-unit-banner {
+        padding: 0.85rem 1rem !important;
+        border-radius: 1.25rem !important;
+        margin-bottom: 1.5rem !important;
+    }
     .vf-mini-table-wrap {
-        padding: 0.45rem 0.25rem !important;
-        margin: 0.25rem auto 0.5rem auto !important;
+        padding: 0.6rem 0.5rem !important;
+        margin: 0.35rem auto 0.75rem auto !important;
+        border-radius: 1rem !important;
     }
     .vf-mini-table {
-        grid-template-columns: 14px repeat(18, minmax(0, 1fr)) !important;
-        gap: 1.5px !important;
-        min-width: 300px !important;
+        grid-template-columns: 18px repeat(18, minmax(20px, 1fr)) !important;
+        gap: 2.5px !important;
+        min-width: 420px !important;
     }
     .vf-mini-corner {
-        width: 14px !important;
-        height: 8px !important;
+        width: 18px !important;
+        height: 10px !important;
     }
     .vf-mini-header,
     .vf-mini-row-num {
-        font-size: 7.5px !important;
+        font-size: 8.5px !important;
     }
     .vf-mini-cell {
-        font-size: 7.5px !important;
-        border-radius: 2px !important;
+        font-size: 9px !important;
+        border-radius: 3px !important;
+        min-height: 20px !important;
     }
 }
 .vf-mini-cell.is-highlighted {

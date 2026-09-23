@@ -1735,8 +1735,9 @@ function renderStoryMap() {
         </div>
     `;
 
-    // Sinuous offsets for Academy path
-    const xOffsets = [0, -42, -68, -35, 0, 35, 68, 42];
+    // Sinuous offsets for Academy path (scaled on mobile to prevent clipping)
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 480;
+    const xOffsets = isMobile ? [0, -18, -30, -16, 0, 16, 30, 18] : [0, -42, -68, -35, 0, 35, 68, 42];
 
     listEl.innerHTML = storyRegions.map((region, ri) => {
         const unlocked = isRegionUnlocked(ri);
@@ -1807,26 +1808,26 @@ function renderStoryMap() {
         }).join('');
 
         return `
-            <div class="duo-path-wrapper">
+            <div class="duo-path-wrapper px-2 sm:px-4">
                 <!-- Academy Unit Banner -->
                 <div class="duo-unit-banner" style="background: #0f172a; border-color: ${unlocked ? region.color : '#334155'};">
-                    <div class="flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
+                    <div class="flex items-center justify-between gap-2.5">
+                        <div class="flex items-center gap-2.5 flex-1 min-w-0">
                             <div class="shrink-0 scale-[0.62] origin-center -m-2">
                                 ${(typeof window.renderGuideAvatar === 'function' && unlocked)
                                     ? window.renderGuideAvatar(region.guideSeed || 'Mendeleev', 84, 'idle', ({ Mendeleev: 'mendeleev', MarieCurie: 'curie', NielsBohr: 'bohr', NeonSpark: 'neon' })[region.guideSeed || 'Mendeleev'] || 'mendeleev')
-                                    : `<div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg" style="background: ${region.color}33; color: ${region.color}; border: 1.5px solid ${region.color}66;">${unlocked ? getIconSvg(regIcon, 'w-6 h-6') : getIconSvg('lock', 'w-6 h-6 text-slate-400')}</div>`}
+                                    : `<div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg" style="background: ${region.color}33; color: ${region.color}; border: 1.5px solid ${region.color}66;">${unlocked ? getIconSvg(regIcon, 'w-5 h-5 sm:w-6 sm:h-6') : getIconSvg('lock', 'w-5 h-5 sm:w-6 sm:h-6 text-slate-400')}</div>`}
                             </div>
-                            <div>
-                                <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 block">بخش ${ri + 1} از ${storyRegions.length}</span>
-                                <h3 class="font-extrabold text-base md:text-lg text-white" style="color: ${unlocked ? region.color : '#94a3b8'}">${region.name}</h3>
-                                <p class="text-xs text-slate-400 mt-0.5 line-clamp-1">${region.desc}</p>
-                                ${region.guide ? `<p class="text-[11px] text-amber-300/90 font-bold mt-1">🧭 راهنما: ${region.guide} — روش کلیک کن!</p>` : ''}
+                            <div class="min-w-0 flex-1">
+                                <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 block">بخش ${ri + 1} از ${storyRegions.length}</span>
+                                <h3 class="font-extrabold text-sm sm:text-base md:text-lg text-white truncate" style="color: ${unlocked ? region.color : '#94a3b8'}">${region.name}</h3>
+                                <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 line-clamp-1">${region.desc}</p>
+                                ${region.guide ? `<p class="text-[10px] sm:text-[11px] text-amber-300/90 font-bold mt-0.5">🧭 راهنما: ${region.guide}</p>` : ''}
                             </div>
                         </div>
                         <div class="text-left shrink-0">
-                            <span class="inline-flex items-center gap-1 text-xs font-black font-english px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-700/80 text-cyan-300">
-                                ${getIconSvg('star', 'w-3.5 h-3.5 text-yellow-400 fill-current')}
+                            <span class="inline-flex items-center gap-1 text-[11px] sm:text-xs font-black font-english px-2.5 py-1 rounded-xl bg-slate-900/90 border border-slate-700/80 text-cyan-300">
+                                ${getIconSvg('star', 'w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-400 fill-current')}
                                 <span>${doneCount} / ${region.levels.length}</span>
                             </span>
                         </div>

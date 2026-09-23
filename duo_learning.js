@@ -827,14 +827,14 @@
         // Motivation banner — gamified league header (real streak + rank)
         const doneCount = ACADEMY_LESSONS.filter((l, i) => i < academyState.unlockedLevel).length;
         html += `
-        <div class="w-full max-w-md mx-auto my-4 px-4">
-            <div class="p-4 rounded-3xl border-2 border-amber-400/60 bg-amber-400/10 shadow-[0_5px_0_rgba(0,0,0,0.5)] flex items-center justify-between gap-3">
-                <div class="text-right">
-                    <span class="text-[11px] font-black text-amber-300 block">🔥 استریک ${academyState.streakDays} روزه — ادامه بده!</span>
+        <div class="w-full max-w-md mx-auto my-3 px-2 sm:px-4">
+            <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-amber-400/60 bg-amber-400/10 shadow-[0_5px_0_rgba(0,0,0,0.5)] flex items-center justify-between gap-2.5 sm:gap-3">
+                <div class="text-right flex-1 min-w-0">
+                    <span class="text-[11px] font-black text-amber-300 block truncate">🔥 استریک ${academyState.streakDays} روزه — ادامه بده!</span>
                     <span class="text-xs font-bold text-white block mt-0.5">${academyRank(academyState.xp)} • ${academyState.xp} XP</span>
                 </div>
                 <div class="text-left shrink-0">
-                    <span class="inline-flex items-center gap-1 text-xs font-black px-3 py-1.5 rounded-xl bg-slate-900 border-2 border-emerald-400/60 text-emerald-300">
+                    <span class="inline-flex items-center gap-1 text-[11px] sm:text-xs font-black px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 border-2 border-emerald-400/60 text-emerald-300">
                         ${doneCount} / ${ACADEMY_LESSONS.length} فصل
                     </span>
                 </div>
@@ -851,13 +851,13 @@
             if (lesson.unit !== currentUnitId) {
                 currentUnitId = lesson.unit;
                 html += `
-                <div class="w-full max-w-md mx-auto my-6 px-4">
-                    <div class="p-4 rounded-3xl border border-slate-700/80 bg-slate-900 shadow-xl flex items-center justify-between">
-                        <div class="text-right">
+                <div class="w-full max-w-md mx-auto my-4 sm:my-6 px-2 sm:px-4">
+                    <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-700/80 bg-slate-900 shadow-xl flex items-center justify-between gap-3">
+                        <div class="text-right flex-1 min-w-0">
                             <span class="text-[11px] font-bold text-slate-400 block">${lesson.unitTitle}</span>
-                            <h3 class="text-sm font-black text-white mt-0.5">${lesson.unitDesc}</h3>
+                            <h3 class="text-xs sm:text-sm font-black text-white mt-0.5 leading-snug break-words">${lesson.unitDesc}</h3>
                         </div>
-                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-black shadow-lg" style="background:${lesson.unitColor}">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl shrink-0 flex items-center justify-center text-white font-black shadow-lg text-sm sm:text-base" style="background:${lesson.unitColor}">
                             ${lesson.unit}
                         </div>
                     </div>
@@ -865,8 +865,9 @@
                 `;
             }
 
-            // Sinuous curve offset (0, 32px, 0, -32px)
-            const offsets = [0, 40, 0, -40];
+            // Sinuous curve offset (scaled gently on mobile to avoid edge clipping)
+            const isMobile = typeof window !== 'undefined' && window.innerWidth < 480;
+            const offsets = isMobile ? [0, 20, 0, -20] : [0, 40, 0, -40];
             const offsetPx = offsets[idx % offsets.length];
 
             const mentor = lesson.mentor;
