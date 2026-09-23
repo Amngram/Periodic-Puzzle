@@ -717,10 +717,17 @@
     };
 
     // Interactive Mini Periodic Table Radar for Stage
-    function renderMiniTable(highlightCols = [], highlightRows = [], targetCoords = []) {
+    // isQuizMode=true hides ALL answer signals (mystery cells) so the
+    // question and answer are never shown side-by-side.
+    function renderMiniTable(highlightCols = [], highlightRows = [], targetCoords = [], isQuizMode = false) {
         const elements = window.elementData || [];
-        let html = '<div class="vf-mini-table max-w-md mx-auto w-full my-3">';
+        let html = '<div class="vf-mini-table-wrap" dir="ltr"><div class="vf-mini-table" dir="ltr">';
+        html += '<div class="vf-mini-corner"></div>';
+        for (let c = 1; c <= 18; c++) {
+            html += `<div class="vf-mini-header">${c}</div>`;
+        }
         for (let r = 1; r <= 7; r++) {
+            html += `<div class="vf-mini-row-num" title="دوره ${r}">${r}</div>`;
             for (let c = 1; c <= 18; c++) {
                 let exists = true;
                 if (r === 1 && c > 1 && c < 18) exists = false;
@@ -735,18 +742,26 @@
                 const isCol = highlightCols.includes(c);
                 const isRow = highlightRows.includes(r);
 
+                const el = elements.find(e => e.p === r && e.g === c);
+                const sym = el ? el.sym : '';
+                const tip = el ? `${el.name} (${el.sym}) - سطر ${r} ستون ${c}` : '';
+
+                if (isQuizMode) {
+                    // QUIZ: genuine recall test — blank cells with coordinate-only
+                    // tooltips, so the mini table can never leak the answer.
+                    html += `<div class="vf-mini-cell vf-mini-blank" title="سطر ${r}، ستون ${c}"></div>`;
+                    continue;
+                }
+
                 let cls = 'vf-mini-cell';
                 if (isTarget) cls += ' is-target';
                 else if (isCol) cls += ' is-active-col';
                 else if (isRow) cls += ' is-active-row';
 
-                const el = elements.find(e => e.p === r && e.g === c);
-                const sym = el ? el.sym : '';
-
-                html += `<div class="${cls}" title="${el ? el.name + ' (' + el.sym + ') - سطر ' + r + ' ستون ' + c : ''}">${isTarget || isCol || isRow ? sym : ''}</div>`;
+                html += `<div class="${cls}" title="${tip}">${isTarget || isCol || isRow ? sym : ''}</div>`;
             }
         }
-        html += '</div>';
+        html += '</div></div>';
         return html;
     }
 
@@ -883,7 +898,9 @@
         if (!stage) return;
 
         const mentor = lesson.mentor;
-        const miniTableHtml = renderMiniTable(lesson.highlightCols, lesson.highlightRows, lesson.targetCoords);
+        const miniTableHtml = step.type === 'dialogue'
+            ? renderMiniTable(lesson.highlightCols, lesson.highlightRows, lesson.targetCoords, false)
+            : renderMiniTable([], [], [], true);
 
         if (step.type === 'dialogue') {
             const avatarHtml = renderLiveAvatar(mentor.seed, 120, 'talking', mentor.id);
@@ -946,8 +963,9 @@
                     </div>
                 </div>
 
-                <!-- Mini Periodic Table Radar -->
+                <!-- Mini Periodic Table Radar (blank recall grid in quiz mode) -->
                 ${miniTableHtml}
+                <p class="text-[11px] text-slate-500 font-bold mb-2 -mt-1">🧠 جدول بالا خالیه — از حافظه‌ات جواب بده!</p>
 
                 <!-- Multiple choice options -->
                 <div class="flex flex-col gap-2.5 w-full mb-4" id="duo-options-list">
@@ -977,6 +995,18 @@
             </div>
             `;
         }
+
+        // Refresh dynamic SVG icons + soft entrance animation for the new stage
+        try { if (window.renderAllIcons) window.renderAllIcons(stage); } catch (e) {}
+        try {
+            stage.style.opacity = '0';
+            stage.style.transform = 'translateY(10px)';
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                stage.style.transition = 'opacity .3s ease, transform .3s ease';
+                stage.style.opacity = '1';
+                stage.style.transform = 'translateY(0)';
+            }));
+        } catch (e) {}
     }
 
     // Option Selection
@@ -1027,12 +1057,27 @@
 
         sheet.classList.remove('hidden');
 
+        // Lock all options + mark correct / wrong visually
+        const optBtns = document.querySelectorAll('.duo-quiz-opt');
+        optBtns.forEach((btn, idx) => {
+            btn.disabled = true;
+            btn.classList.remove('hover:border-cyan-400', 'cursor-pointer');
+            if (idx === step.correct) btn.classList.add('opt-correct');
+            else if (idx === academyState.selectedOption && !isCorrect) btn.classList.add('opt-wrong');
+            else btn.classList.add('opt-dim');
+        });
+        const correctBtn = document.getElementById(`duo-opt-${step.correct}`);
+        if (correctBtn) {
+            correctBtn.classList.remove('opt-dim');
+            correctBtn.classList.add('opt-correct');
+        }
+
         if (isCorrect) {
             if (window.SFX && window.SFX.correct) window.SFX.correct();
             academyState.xp += 15;
             saveAcademyProgress();
 
-            sheet.className = 'absolute bottom-0 left-0 right-0 p-5 rounded-t-3xl border-t-2 bg-slate-900/95 backdrop-blur-xl border-emerald-500 shadow-2xl text-right z-30 transition-transform transform translate-y-0';
+            sheet.className = 'fixed bottom-0 left-0 right-0 p-5 md:p-6 rounded-t-3xl border-t-2 bg-slate-900/95 backdrop-blur-2xl border-emerald-500 shadow-2xl text-right z-[80] transition-transform transform translate-y-0';
             iconContainer.className = 'w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
             iconContainer.innerHTML = '✓';
             titleEl.className = 'text-base font-black text-emerald-400';
@@ -1051,13 +1096,27 @@
             if (window.SFX && window.SFX.wrong) window.SFX.wrong();
             academyState.hearts = Math.max(0, academyState.hearts - 1);
 
+            // Re-render hearts immediately so the loss is visible
+            const heartsBox = document.getElementById('duo-hearts-container');
+            if (heartsBox) {
+                let hhHtml = '';
+                for (let i = 0; i < 3; i++) {
+                    hhHtml += `
+                    <svg class="w-6 h-6 transition-transform ${i < academyState.hearts ? 'text-rose-500 fill-rose-500 animate-pulse' : 'text-slate-700'}" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    `;
+                }
+                heartsBox.innerHTML = hhHtml;
+            }
+
             // Screen flash red
             const flash = document.createElement('div');
             flash.className = 'screen-danger-flash';
             document.body.appendChild(flash);
             setTimeout(() => flash.remove(), 600);
 
-            sheet.className = 'absolute bottom-0 left-0 right-0 p-5 rounded-t-3xl border-t-2 bg-slate-900/95 backdrop-blur-xl border-rose-500 shadow-2xl text-right z-30 transition-transform transform translate-y-0';
+            sheet.className = 'fixed bottom-0 left-0 right-0 p-5 md:p-6 rounded-t-3xl border-t-2 bg-slate-900/95 backdrop-blur-2xl border-rose-500 shadow-2xl text-right z-[80] transition-transform transform translate-y-0';
             iconContainer.className = 'w-10 h-10 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0';
             iconContainer.innerHTML = '✕';
             titleEl.className = 'text-base font-black text-rose-400';

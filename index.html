@@ -259,6 +259,20 @@
                     </div>
                 </div>
 
+                <!-- Quiz progress: answered / total (VibeFarsi progress component) -->
+                <div class="w-full mt-1">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 mb-1.5">
+                        <span class="flex items-center gap-1.5">
+                            <span data-icon="target" class="w-3.5 h-3.5 text-cyan-400"></span>
+                            <span>پیشرفت آزمون</span>
+                        </span>
+                        <span id="quiz-progress-text" class="font-english text-cyan-300">0 / 0</span>
+                    </div>
+                    <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                        <div id="quiz-progress-fill" class="bg-gradient-to-l from-cyan-400 via-emerald-400 to-cyan-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
                 <!-- Controls -->
                 <div class="flex flex-row md:flex-col gap-2 w-full md:w-auto">
                     <button id="hint-btn" class="flex-1 md:flex-none bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-3 rounded-2xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer" title="راهنما با ۵ امتیاز جریمه">
@@ -298,7 +312,7 @@
     </div>
 
     <!-- ============================================================
-         FULL-SCREEN DUOLINGO CONVERSATIONAL LEARNING APP
+         FULL-SCREEN ACADEMY CONVERSATIONAL LEARNING APP
          Replaces the entire website view when active
          ============================================================ -->
     <div id="duo-learn-app" class="fixed inset-0 z-[120] bg-slate-950 flex flex-col text-slate-100 overflow-hidden hidden select-none">
@@ -329,7 +343,7 @@
             </div>
         </div>
 
-        <!-- Mode A: Duolingo Path View (Sinuous Learning Road) -->
+        <!-- Mode A: Academy Path View (Sinuous Learning Road) -->
         <div id="duo-path-view" class="flex-1 overflow-y-auto px-4 py-8 relative">
             <div class="max-w-lg mx-auto" id="duo-path-stream">
                 <!-- Sinuous path items injected by duo_learning.js -->
@@ -357,8 +371,17 @@
             </div>
 
             <!-- Bottom Feedback Sheet (Sliding from bottom) -->
-            <div id="duo-result-sheet" class="hidden">
-                <!-- Result feedback injected dynamically -->
+            <div id="duo-feedback-sheet" class="fixed bottom-0 left-0 right-0 p-5 md:p-6 rounded-t-3xl border-t-2 bg-slate-900/95 backdrop-blur-2xl shadow-2xl z-[80] hidden transition-transform duration-300">
+                <div class="max-w-xl mx-auto flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5">
+                        <div id="duo-feedback-icon" class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-xl font-black"></div>
+                        <div class="text-right">
+                            <h4 id="duo-feedback-title" class="text-base md:text-lg font-black leading-tight"></h4>
+                            <p id="duo-feedback-desc" class="text-xs md:text-sm text-slate-300 mt-1 leading-relaxed"></p>
+                        </div>
+                    </div>
+                    <button id="duo-feedback-action-btn" type="button" onclick="advanceDuoFromFeedback()" class="vibefarsi-shine px-6 py-3 rounded-2xl font-black text-sm shadow-xl shrink-0 cursor-pointer"></button>
+                </div>
             </div>
         </div>
     </div>

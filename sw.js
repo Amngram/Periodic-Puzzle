@@ -1,5 +1,5 @@
 /* Periodic Puzzle — Service Worker (Offline PWA) */
-const CACHE_NAME = 'periodic-puzzle-v5';
+const CACHE_NAME = 'periodic-puzzle-v6';
 const CORE_ASSETS = [
     './',
     './index.html',

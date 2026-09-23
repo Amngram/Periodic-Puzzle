@@ -961,6 +961,52 @@ function launchConfetti(count = 120) {
 }
 
 /* ============================================================
+   TOAST NOTIFICATIONS (VibeFarsi floating stack)
+   Global — also used by handleCellClick / useHint / Academy
+   ============================================================ */
+function showToast(title, message, type = 'info', duration = 3000) {
+    try {
+        let container = document.getElementById('vf-toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'vf-toast-container';
+            container.setAttribute('aria-live', 'polite');
+            document.body.appendChild(container);
+        }
+        const toast = document.createElement('div');
+        const palette = {
+            success: { border: '#10b981', bg: 'rgba(6,78,59,0.94)', icon: 'check-circle', iconColor: '#34d399' },
+            info:    { border: '#06b6d4', bg: 'rgba(8,51,68,0.95)',  icon: 'info',          iconColor: '#22d3ee' },
+            warning: { border: '#f59e0b', bg: 'rgba(69,39,2,0.95)',  icon: 'lightbulb',     iconColor: '#fbbf24' },
+            danger:  { border: '#f43f5e', bg: 'rgba(76,5,25,0.95)',  icon: 'x',             iconColor: '#fb7185' }
+        };
+        const p = palette[type] || palette.info;
+        toast.className = 'vf-toast-item animate-slide-in';
+        toast.style.cssText = `border-color:${p.border};background:${p.bg}`;
+        let iconSvg = '•';
+        try { iconSvg = window.getIconSvg ? window.getIconSvg(p.icon, 'w-5 h-5 shrink-0') : '•'; } catch (e) {}
+        toast.innerHTML = `<span style="color:${p.iconColor};flex-shrink:0;display:flex;align-items:flex-start;padding-top:2px">${iconSvg}</span><span style="flex:1;min-width:0"><b style="display:block;font-size:0.82rem;color:#fff;line-height:1.5">${title}</b>${message ? `<span style="display:block;font-size:0.72rem;color:#cbd5e1;margin-top:2px;line-height:1.7">${message}</span>` : ''}</span>`;
+        container.appendChild(toast);
+        while (container.children.length > 3) container.firstChild.remove();
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(8px)';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    } catch (e) {}
+}
+
+// Global bridges for the Academy engine (duo_learning.js)
+window.showToast = showToast;
+window.SFX = SFX;
+window.launchConfetti = launchConfetti;
+if (!window.confetti) {
+    window.confetti = function(opts) {
+        launchConfetti(opts && opts.particleCount ? opts.particleCount : 120);
+    };
+}
+
+/* ============================================================
    HINT SYSTEM (-5 points, laser crosshairs + exact coordinate HUD)
    ============================================================ */
 function useHint() {
@@ -1019,7 +1065,8 @@ function startChallengeTimer() {
 
     challengeTimeLeft = CHALLENGE_SECONDS;
     renderChallengeBar();
-    document.getElementById('challenge-bar-container').classList.remove('hidden');
+    const barContainer = document.getElementById('challenge-bar-container');
+    if (barContainer) barContainer.classList.remove('hidden');
 
     challengeInterval = setInterval(() => {
         challengeTimeLeft--;
@@ -1605,7 +1652,7 @@ function renderStoryMap() {
         </div>
     `;
 
-    // Sinuous offsets for Duolingo path
+    // Sinuous offsets for Academy path
     const xOffsets = [0, -42, -68, -35, 0, 35, 68, 42];
 
     listEl.innerHTML = storyRegions.map((region, ri) => {
@@ -1678,7 +1725,7 @@ function renderStoryMap() {
 
         return `
             <div class="duo-path-wrapper">
-                <!-- Duolingo Unit Banner -->
+                <!-- Academy Unit Banner -->
                 <div class="duo-unit-banner" style="background: linear-gradient(135deg, ${region.color}22, rgba(15,23,42,0.95)); border-color: ${unlocked ? region.color : '#334155'};">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3">
@@ -2072,14 +2119,16 @@ function nextElement() {
     if (gameMode === 'symbol') {
         targetSymbolEl.textContent = currentElement.sym;
         targetNameEl.textContent = currentElement.name;
+        targetSymbolEl.style.fontSize = '';
+        targetSymbolEl.className = 'leading-none font-black text-white';
     } else {
         targetSymbolEl.textContent = currentElement.name;
         targetNameEl.textContent = currentElement.sym;
-        if (currentElement.name.length > 8) {
-            targetSymbolEl.className = 'text-2xl md:text-3xl leading-none font-black';
-        } else {
-            targetSymbolEl.className = 'text-3xl md:text-4xl leading-none font-black';
-        }
+        // Dynamic clamp: long Persian names shrink so they never overflow the box
+        const nLen = currentElement.name.length;
+        const fs = nLen <= 5 ? '2rem' : nLen <= 8 ? '1.6rem' : nLen <= 11 ? '1.3rem' : '1.05rem';
+        targetSymbolEl.style.fontSize = fs;
+        targetSymbolEl.className = 'leading-snug font-black text-white';
     }
     
     // Add pop animation to target box
@@ -2115,7 +2164,9 @@ function handleCellClick(cell, targetAtomic) {
     }
     
     if (targetAtomic === currentElement.num) {
-        // Correct!
+        // Correct! Snapshot first so later async steps can't lose the target.
+        const doneEl = currentElement;
+
         cell.classList.remove('puzzle-target');
         cell.classList.remove('pre-filled');
         cell.classList.add('filled');
@@ -2125,42 +2176,50 @@ function handleCellClick(cell, targetAtomic) {
 
         triggerScreenSuccess();
         registerCorrectAnswer(cell);
-        
+
         // Show brief victory toast with position details
-        const pName = currentElement.p >= 9 ? (currentElement.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${currentElement.p}`;
-        const gName = currentElement.p >= 9 ? 'ردیف پایین' : `ستون ${currentElement.g}`;
-        showToast(`✅ عالی!`, `${currentElement.name} (${currentElement.sym}) در ${pName}، ${gName}`, 'info', 1800);
+        const pName = doneEl.p >= 9 ? (doneEl.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${doneEl.p}`;
+        const gName = doneEl.p >= 9 ? 'ردیف پایین' : `ستون ${doneEl.g}`;
+        try {
+            showToast(`✅ عالی!`, `${doneEl.name} (${doneEl.sym}) در ${pName}، ${gName}`, 'info', 1800);
+        } catch (e) {}
 
         // Record progress for the heatmap
-        recordAnswerResult(targetAtomic, true);
+        try { recordAnswerResult(targetAtomic, true); } catch (e) {}
 
         stopChallengeTimer();
         updateStats();
-        setTimeout(() => { nextElement(); }, 280);
+        setTimeout(() => { try { nextElement(); } catch (e) {} }, 280);
     } else {
-        // Wrong!
+        // Wrong! Snapshot the target before any state change.
+        const missedEl = currentElement;
+
         cell.classList.add('wrong-guess');
         setTimeout(() => cell.classList.remove('wrong-guess'), 550);
 
         triggerScreenDanger();
-        recordAnswerResult(currentElement.num, false);
+        try { recordAnswerResult(missedEl.num, false); } catch (e) {}
         registerWrongAnswer(cell); // includes penalty & SFX
-        
+
         const clickedEl = elementData.find(e => e.num == targetAtomic);
         const clickedName = clickedEl ? `${clickedEl.name} (${clickedEl.sym})` : 'یک خانه دیگر';
-        const targetP = currentElement.p >= 9 ? (currentElement.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${currentElement.p}`;
-        const targetG = currentElement.p >= 9 ? 'ردیف پایین' : `ستون ${currentElement.g}`;
-        
-        showToast(
-            `❌ اشتباه بود!`,
-            `این خانه جای ${clickedName} است! جایگاه ${currentElement.name} (${currentElement.sym}): ${targetP}، ${targetG}`,
-            'danger',
-            3500
-        );
+        const targetP = missedEl.p >= 9 ? (missedEl.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${missedEl.p}`;
+        const targetG = missedEl.p >= 9 ? 'ردیف پایین' : `ستون ${missedEl.g}`;
 
+        // Decrement FIRST so hearts can never desync even if feedback fails
         lives--;
+
+        try {
+            showToast(
+                `❌ اشتباه بود!`,
+                `این خانه جای ${clickedName} است! جایگاه ${missedEl.name} (${missedEl.sym}): ${targetP}، ${targetG}`,
+                'danger',
+                3500
+            );
+        } catch (e) {}
+
         updateStats(); // render AFTER decrementing so hearts stay in sync
-        
+
         if (lives <= 0) {
             endGame(false);
         }
@@ -2194,6 +2253,16 @@ function updateStats() {
         livesEl.classList.add('heart-hit');
     }
     livesEl.dataset.prev = lives;
+    // VibeFarsi quiz progress component: answered / total
+    try {
+        const total = stats.correct + stats.wrong + currentPool.length + (currentElement ? 1 : 0);
+        const done = stats.correct + stats.wrong;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const fill = document.getElementById('quiz-progress-fill');
+        const txt = document.getElementById('quiz-progress-text');
+        if (fill) fill.style.width = pct + '%';
+        if (txt) txt.textContent = `${done} / ${total}`;
+    } catch (e) {}
 }
 
 function updateTimerDisplay() {
