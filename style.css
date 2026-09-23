@@ -114,106 +114,153 @@ body {
     font-family: 'Vazirmatn', sans-serif; /* Update Outfit to Vazirmatn globally as requested */
 }
 
-/* Base element styles matching the prozhenegar theme */
+/* Base element styles matching modern cyberpunk & glassmorphic laboratory */
 .element {
     aspect-ratio: 1;
     position: relative;
-    border-radius: 0.375rem;
+    border-radius: 0.5rem;
     padding: 0.25rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
     color: white;
-    cursor: default;
+    cursor: pointer;
     background-color: var(--c-unknown);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    backdrop-filter: blur(4px);
+    user-select: none;
+}
+.element:hover {
+    transform: translateY(-3px) scale(1.12);
+    box-shadow: 0 8px 24px -2px var(--glow, rgba(0, 229, 255, 0.4)), inset 0 0 0 1px rgba(255,255,255,0.3);
+    z-index: 35;
 }
 
 .element .number {
     font-size: 0.65rem;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 .element .symbol {
     font-size: 1.25rem;
-    font-weight: 800;
+    font-weight: 900;
     line-height: 1;
     text-align: center;
     margin: auto 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .element .name {
-    font-size: 0.5rem;
-    font-weight: 500;
+    font-size: 0.55rem;
+    font-weight: 600;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
-/* Colors for Lantanides and Actinides */
-.cat-lanthanide { background-color: #bd00ff; color: white; }
-.cat-actinide { background-color: #ff8e00; color: #1e293b; }
-.cat-alkali { background-color: var(--c-alkali); }
-.cat-alkaline-earth { background-color: var(--c-alkaline-earth); color: #1e293b; }
-.cat-transition { background-color: var(--c-transition); color: #1e293b; }
-.cat-post-transition { background-color: var(--c-post-transition); }
-.cat-metalloid { background-color: var(--c-metalloid); color: #1e293b; }
-.cat-nonmetal { background-color: var(--c-nonmetal); }
-.cat-halogen { background-color: var(--c-halogen); }
-.cat-noble { background-color: var(--c-noble); color: #1e293b; }
-.cat-unknown { background-color: var(--c-unknown); }
+/* Category Glow & Color Tokens */
+.cat-lanthanide { --glow: #f72585; background: linear-gradient(135deg, rgba(247,37,133,0.35), rgba(247,37,133,0.12)); border: 1px solid rgba(247,37,133,0.6); color: white; }
+.cat-actinide { --glow: #ff7b00; background: linear-gradient(135deg, rgba(255,123,0,0.35), rgba(255,123,0,0.12)); border: 1px solid rgba(255,123,0,0.6); color: #fff; }
+.cat-alkali { --glow: #ff2a6d; background: linear-gradient(135deg, rgba(255,42,109,0.35), rgba(255,42,109,0.12)); border: 1px solid rgba(255,42,109,0.6); color: white; }
+.cat-alkaline-earth { --glow: #ff9f1c; background: linear-gradient(135deg, rgba(255,159,28,0.35), rgba(255,159,28,0.12)); border: 1px solid rgba(255,159,28,0.6); color: white; }
+.cat-transition { --glow: #00e5ff; background: linear-gradient(135deg, rgba(0,229,255,0.35), rgba(0,229,255,0.12)); border: 1px solid rgba(0,229,255,0.5); color: white; }
+.cat-post-transition { --glow: #2ec4b6; background: linear-gradient(135deg, rgba(46,196,182,0.35), rgba(46,196,182,0.12)); border: 1px solid rgba(46,196,182,0.5); color: white; }
+.cat-metalloid { --glow: #e71d36; background: linear-gradient(135deg, rgba(231,29,54,0.35), rgba(231,29,54,0.12)); border: 1px solid rgba(231,29,54,0.6); color: white; }
+.cat-nonmetal { --glow: #00ff9f; background: linear-gradient(135deg, rgba(0,255,159,0.35), rgba(0,255,159,0.12)); border: 1px solid rgba(0,255,159,0.6); color: white; }
+.cat-halogen { --glow: #a6ff00; background: linear-gradient(135deg, rgba(166,255,0,0.35), rgba(166,255,0,0.12)); border: 1px solid rgba(166,255,0,0.6); color: white; }
+.cat-noble { --glow: #bd00ff; background: linear-gradient(135deg, rgba(189,0,255,0.35), rgba(189,0,255,0.12)); border: 1px solid rgba(189,0,255,0.6); color: white; }
+.cat-unknown { --glow: #64748b; background: rgba(51, 65, 85, 0.4); border: 1px solid rgba(100, 116, 139, 0.4); }
 
 /* Puzzle Specific Styles */
 .element.puzzle-target {
-    background-color: #1e293b;
-    border: 2px dashed #475569;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1.5px dashed rgba(100, 116, 139, 0.55);
     cursor: pointer;
-    box-shadow: none;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
     color: transparent;
 }
 .element.puzzle-target:hover {
-    border-color: #0ea5e9;
-    background-color: #334155;
-    transform: scale(1.05);
-    z-index: 10;
+    border-color: #00e5ff;
+    background: rgba(14, 165, 233, 0.18);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    transform: translateY(-3px) scale(1.12);
+    z-index: 25;
 }
 
 .element.puzzle-target .number,
 .element.puzzle-target .symbol,
 .element.puzzle-target .name {
-    opacity: 0; /* Hide content until filled */
+    opacity: 0;
 }
 
 /* When a puzzle piece is correctly placed */
 .element.filled {
     border: none;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.2);
-    cursor: default;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 20px var(--glow, rgba(0, 255, 159, 0.4));
+    cursor: pointer;
     transform: scale(1);
-    z-index: 5;
-    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    z-index: 10;
+    animation: vf-correct-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 .element.filled .number,
 .element.filled .symbol,
 .element.filled .name {
-    opacity: 1; /* Show content */
+    opacity: 1;
 }
 
-/* Pre-filled elements (Transition metals, etc.) */
+/* Pre-filled elements */
 .element.pre-filled {
-    opacity: 0.4; /* Dim prefilled elements */
-    filter: saturate(0.5);
+    opacity: 0.45;
+    filter: saturate(0.6);
 }
 
 .element.wrong-guess {
-    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-    border-color: #ef4444 !important;
-    background-color: rgba(239, 68, 68, 0.2) !important;
+    animation: vf-wrong-flash 0.55s ease-in-out both !important;
+    border: 2px solid #ef4444 !important;
+    background-color: rgba(239, 68, 68, 0.45) !important;
+    box-shadow: 0 0 28px 8px #ef4444 !important;
+    z-index: 45 !important;
+}
+
+/* Hint High-Tech Crosshair Guides */
+.hint-laser-row {
+    background: rgba(0, 229, 255, 0.22) !important;
+    box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.4) !important;
+    border-color: rgba(0, 229, 255, 0.7) !important;
+    transition: all 0.3s ease;
+}
+.hint-laser-col {
+    background: rgba(189, 0, 255, 0.22) !important;
+    box-shadow: inset 0 0 12px rgba(189, 0, 255, 0.4) !important;
+    border-color: rgba(189, 0, 255, 0.7) !important;
+    transition: all 0.3s ease;
+}
+.hint-target-beacon {
+    animation: vf-beacon-pulse 0.75s ease-in-out infinite alternate !important;
+    border-color: #00ff9f !important;
+    background: rgba(0, 255, 159, 0.25) !important;
+    z-index: 50 !important;
+}
+@keyframes vf-beacon-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 15px #00ff9f, inset 0 0 10px #00ff9f; }
+    100% { transform: scale(1.24); box-shadow: 0 0 40px 10px #00ff9f, inset 0 0 20px #00ff9f; }
+}
+
+@keyframes vf-correct-pop {
+    0% { transform: scale(0.7); filter: brightness(2.5); box-shadow: 0 0 40px #00ff9f; }
+    50% { transform: scale(1.22); filter: brightness(1.6); box-shadow: 0 0 30px #00ff9f; }
+    100% { transform: scale(1); filter: brightness(1); box-shadow: 0 0 18px var(--glow, rgba(255,255,255,0.3)); }
+}
+
+@keyframes vf-wrong-flash {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    15%, 45%, 75% { transform: translate3d(-6px, 0, 0) scale(1.06); }
+    30%, 60%, 90% { transform: translate3d(6px, 0, 0) scale(1.06); }
 }
 
 .target-element-card {
@@ -1310,4 +1357,146 @@ body {
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+/* ============================================================
+   LIVE ANIMATED BLOBATAR AVATAR SYSTEM (https://blobatar.dev/)
+   ============================================================ */
+.vf-blobatar-stage {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.vf-blobatar-stage:hover {
+    transform: scale(1.08) translateY(-4px);
+}
+.vf-blobatar-stage:active {
+    transform: scale(0.92) translateY(4px);
+}
+
+.vf-blobatar-body {
+    transform-origin: center bottom;
+    animation: vf-blob-idle 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55));
+}
+.vf-blobatar-stage.is-talking .vf-blobatar-body {
+    animation: vf-blob-talk 0.32s ease-in-out infinite alternate;
+}
+.vf-blobatar-stage.is-happy .vf-blobatar-body {
+    animation: vf-blob-happy 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite alternate;
+}
+.vf-blobatar-stage.is-sad .vf-blobatar-body {
+    animation: vf-blob-sad 0.6s ease-in-out;
+}
+
+@keyframes vf-blob-idle {
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    50% { transform: translateY(-7px) scale(1.025, 0.975); }
+}
+@keyframes vf-blob-talk {
+    0% { transform: scale(1, 1) rotate(0deg); }
+    50% { transform: scale(1.04, 0.96) rotate(-1.5deg); }
+    100% { transform: scale(0.98, 1.03) rotate(1.5deg); }
+}
+@keyframes vf-blob-happy {
+    0% { transform: translateY(0) scale(1, 1) rotate(0deg); }
+    100% { transform: translateY(-24px) scale(1.12, 0.88) rotate(-4deg); }
+}
+@keyframes vf-blob-sad {
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    30% { transform: translateY(8px) scale(1.06, 0.92) rotate(-3deg); }
+    70% { transform: translateY(4px) scale(0.96, 1.02) rotate(2deg); }
+}
+
+/* Eye Blinking */
+@keyframes vf-blink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    96% { transform: scaleY(0.08); }
+}
+.vf-blob-eyes {
+    transform-origin: center center;
+    animation: vf-blink 3.4s infinite;
+}
+
+/* Mouth talking */
+@keyframes vf-mouth-chatter {
+    0%, 100% { transform: scale(1, 1); }
+    50% { transform: scale(1.2, 0.6); }
+}
+.vf-blobatar-stage.is-talking .vf-blob-mouth {
+    animation: vf-mouth-chatter 0.28s infinite alternate;
+    transform-origin: center center;
+}
+
+/* Screen Edges Damage / Victory Feedback */
+.screen-danger-flash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 60px 20px rgba(239, 68, 68, 0.55);
+    z-index: 9999;
+    animation: vf-flash-fade 0.6s ease-out forwards;
+}
+.screen-success-flash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 60px 20px rgba(0, 255, 159, 0.55);
+    z-index: 9999;
+    animation: vf-flash-fade 0.6s ease-out forwards;
+}
+@keyframes vf-flash-fade {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Interactive Mini Periodic Table inside Academy Mode */
+.vf-mini-table {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+    gap: 2px;
+    padding: 0.6rem;
+    border-radius: 0.75rem;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+}
+.vf-mini-cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    background: rgba(51, 65, 85, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: #94a3b8;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+}
+.vf-mini-cell.is-highlighted {
+    background: #06b6d4 !important;
+    color: #0f172a !important;
+    box-shadow: 0 0 10px #06b6d4;
+    transform: scale(1.3);
+    z-index: 10;
+}
+.vf-mini-cell.is-target {
+    background: #00ff9f !important;
+    color: #0f172a !important;
+    animation: vf-beacon-pulse 0.7s infinite alternate;
+    z-index: 15;
+}
+.vf-mini-cell.is-active-col {
+    background: rgba(189, 0, 255, 0.45);
+    color: #fff;
+}
+.vf-mini-cell.is-active-row {
+    background: rgba(0, 229, 255, 0.45);
+    color: #fff;
 }

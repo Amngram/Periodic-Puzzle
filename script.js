@@ -734,6 +734,7 @@ const elementData = [
     { num: 117, sym: 'Ts', name: 'تنسین', p: 7, g: 17, cat: 'unknown', isMainBlock: false },
     { num: 118, sym: 'Og', name: 'اوگانسون', p: 7, g: 18, cat: 'unknown', isMainBlock: false }
 ];
+window.elementData = elementData;
 
 
 // Game State
@@ -960,7 +961,7 @@ function launchConfetti(count = 120) {
 }
 
 /* ============================================================
-   HINT SYSTEM (-5 points, flash target row/column green)
+   HINT SYSTEM (-5 points, laser crosshairs + exact coordinate HUD)
    ============================================================ */
 function useHint() {
     if (!isGameActive || !currentElement) return;
@@ -969,17 +970,44 @@ function useHint() {
     updateStats();
     SFX.hint();
 
-    const cells = tableEl.querySelectorAll('.puzzle-target');
-    cells.forEach(c => {
-        const el = elementData.find(e => e.num == c.dataset.atomic);
+    const period = currentElement.p;
+    const group = currentElement.g;
+    const periodName = (period === 9) ? 'لانتانیدها' : (period === 10) ? 'اکتینیدها' : `دوره (سطر) ${period}`;
+    const groupName = (period >= 9) ? 'ردیف پایین' : `گروه (ستون) ${group}`;
+
+    // 1. High-contrast Toast with exact coordinates
+    showToast(
+        `🎯 راهنمای جایگاه: ${currentElement.name} (${currentElement.sym})`,
+        `${periodName} • ${groupName}`,
+        'warning',
+        4500
+    );
+
+    // 2. Highlight Row & Column laser lines across the table
+    const allCells = tableEl.querySelectorAll('.element');
+    allCells.forEach(c => {
+        const atomic = c.dataset.atomicNum || c.dataset.atomic;
+        const el = elementData.find(e => e.num == atomic);
         if (!el) return;
-        const matchRow = el.p === currentElement.p || (el.p === 9 && currentElement.p === 9) || (el.p === 10 && currentElement.p === 10);
-        const matchCol = el.g === currentElement.g;
-        if (matchRow || matchCol) {
-            c.classList.add('hint-pulse');
-            setTimeout(() => c.classList.remove('hint-pulse'), 2600);
+        if (el.p === period) {
+            c.classList.add('hint-laser-row');
+            setTimeout(() => c.classList.remove('hint-laser-row'), 3200);
+        }
+        if (el.g === group && period < 9) {
+            c.classList.add('hint-laser-col');
+            setTimeout(() => c.classList.remove('hint-laser-col'), 3200);
         }
     });
+
+    // 3. Highlight the EXACT target cell with rotating beacon
+    const targetCell = tableEl.querySelector(`.element[data-atomic-num="${currentElement.num}"], .element[data-atomic="${currentElement.num}"]`);
+    if (targetCell) {
+        targetCell.classList.add('hint-target-beacon');
+        setTimeout(() => targetCell.classList.remove('hint-target-beacon'), 3600);
+        try {
+            targetCell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } catch (e) {}
+    }
 }
 
 /* ============================================================
@@ -1442,6 +1470,9 @@ function createGrid(activeGame = false) {
                 // Pre-filled items (does not match current quiz filter)
                 cell.classList.add(`cat-${el.cat}`);
                 cell.classList.add('pre-filled');
+                cell.dataset.atomic = el.num;
+                cell.dataset.colorClass = `cat-${el.cat}`;
+                cell.addEventListener('click', () => handleCellClick(cell, el.num));
                 
                 cell.innerHTML = `
                     <span class="number" style="direction: ltr; text-align: left;">${el.num}</span>
@@ -2040,15 +2071,14 @@ function nextElement() {
     
     if (gameMode === 'symbol') {
         targetSymbolEl.textContent = currentElement.sym;
-        targetNameEl.textContent = ''; // Hide name
+        targetNameEl.textContent = currentElement.name;
     } else {
         targetSymbolEl.textContent = currentElement.name;
-        targetNameEl.textContent = ''; // Show symbol small below
-        // Adjust text size if name is long
+        targetNameEl.textContent = currentElement.sym;
         if (currentElement.name.length > 8) {
-            targetSymbolEl.className = 'text-2xl md:text-3xl leading-none';
+            targetSymbolEl.className = 'text-2xl md:text-3xl leading-none font-black';
         } else {
-            targetSymbolEl.className = 'text-3xl md:text-4xl leading-none';
+            targetSymbolEl.className = 'text-3xl md:text-4xl leading-none font-black';
         }
     }
     
@@ -2062,31 +2092,72 @@ function nextElement() {
     startChallengeTimer();
 }
 
+function triggerScreenDanger() {
+    const flash = document.createElement('div');
+    flash.className = 'screen-danger-flash';
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 600);
+}
+
+function triggerScreenSuccess() {
+    const flash = document.createElement('div');
+    flash.className = 'screen-success-flash';
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 600);
+}
+
 function handleCellClick(cell, targetAtomic) {
-    if (!isGameActive || !currentElement || cell.classList.contains('filled')) return;
+    if (!isGameActive || !currentElement) return;
+
+    // If cell was already filled with the current element, ignore
+    if (cell.classList.contains('filled') && targetAtomic === currentElement.num) {
+        return;
+    }
     
     if (targetAtomic === currentElement.num) {
         // Correct!
         cell.classList.remove('puzzle-target');
+        cell.classList.remove('pre-filled');
         cell.classList.add('filled');
-        cell.classList.add(cell.dataset.colorClass); // Apply original color
+        if (cell.dataset.colorClass) {
+            cell.classList.add(cell.dataset.colorClass);
+        }
 
+        triggerScreenSuccess();
         registerCorrectAnswer(cell);
         
+        // Show brief victory toast with position details
+        const pName = currentElement.p >= 9 ? (currentElement.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${currentElement.p}`;
+        const gName = currentElement.p >= 9 ? 'ردیف پایین' : `ستون ${currentElement.g}`;
+        showToast(`✅ عالی!`, `${currentElement.name} (${currentElement.sym}) در ${pName}، ${gName}`, 'info', 1800);
+
         // Record progress for the heatmap
         recordAnswerResult(targetAtomic, true);
 
         stopChallengeTimer();
         updateStats();
-        setTimeout(() => { nextElement(); }, 250);
+        setTimeout(() => { nextElement(); }, 280);
     } else {
         // Wrong!
         cell.classList.add('wrong-guess');
-        setTimeout(() => cell.classList.remove('wrong-guess'), 500);
+        setTimeout(() => cell.classList.remove('wrong-guess'), 550);
 
+        triggerScreenDanger();
         recordAnswerResult(currentElement.num, false);
-        registerWrongAnswer(cell); // includes the -5 penalty & SFX
+        registerWrongAnswer(cell); // includes penalty & SFX
         
+        const clickedEl = elementData.find(e => e.num == targetAtomic);
+        const clickedName = clickedEl ? `${clickedEl.name} (${clickedEl.sym})` : 'یک خانه دیگر';
+        const targetP = currentElement.p >= 9 ? (currentElement.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${currentElement.p}`;
+        const targetG = currentElement.p >= 9 ? 'ردیف پایین' : `ستون ${currentElement.g}`;
+        
+        showToast(
+            `❌ اشتباه بود!`,
+            `این خانه جای ${clickedName} است! جایگاه ${currentElement.name} (${currentElement.sym}): ${targetP}، ${targetG}`,
+            'danger',
+            3500
+        );
+
         lives--;
         updateStats(); // render AFTER decrementing so hearts stay in sync
         
