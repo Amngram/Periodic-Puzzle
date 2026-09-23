@@ -1142,6 +1142,12 @@
 
         if (isCorrect) {
             if (window.SFX && window.SFX.correct) window.SFX.correct();
+            if (window.triggerHaptic) window.triggerHaptic('success');
+            document.body.classList.remove('vf-screen-flash-correct', 'vf-screen-flash-wrong');
+            void document.body.offsetWidth;
+            document.body.classList.add('vf-screen-flash-correct');
+            setTimeout(() => document.body.classList.remove('vf-screen-flash-correct'), 450);
+
             academyState.xp += 15;
             saveAcademyProgress();
 
@@ -1167,6 +1173,12 @@
             }
         } else {
             if (window.SFX && window.SFX.wrong) window.SFX.wrong();
+            if (window.triggerHaptic) window.triggerHaptic('error');
+            document.body.classList.remove('vf-screen-flash-correct', 'vf-screen-flash-wrong');
+            void document.body.offsetWidth;
+            document.body.classList.add('vf-screen-flash-wrong');
+            setTimeout(() => document.body.classList.remove('vf-screen-flash-wrong'), 450);
+
             academyState.hearts = Math.max(0, academyState.hearts - 1);
 
             // Avatar emotional reaction: encouraging sad tilt

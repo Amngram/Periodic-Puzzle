@@ -10,11 +10,11 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=8.1">
     <!-- SVG Icon Registry (100% offline, guaranteed instant render) -->
-    <script src="icons.js"></script>
+    <script src="icons.js?v=8.1"></script>
     <!-- Offline Blobatar Geometric Avatars -->
-    <script src="blobatar.js"></script>
+    <script src="blobatar.js?v=8.1"></script>
 </head>
 <body class="bg-slate-950 min-h-screen text-slate-100 font-vazirmatn antialiased selection:bg-cyan-500 selection:text-white relative overflow-x-hidden">
 
@@ -77,6 +77,26 @@
                 </div>
             </div>
 
+            <!-- Mobile Mode Fast Hub (One-tap direct access on phones) -->
+            <div class="mobile-quick-hub md:hidden flex items-center justify-between gap-1.5 overflow-x-auto py-2 px-1 mb-4 no-scrollbar">
+                <button type="button" onclick="document.getElementById('start-btn').scrollIntoView({behavior:'smooth', block:'center'})" class="px-3 py-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black flex items-center gap-1.5 shrink-0 active:scale-95 shadow-sm cursor-pointer">
+                    <span data-icon="play" class="w-3.5 h-3.5 fill-current"></span>
+                    <span>آزمون پازل</span>
+                </button>
+                <button type="button" onclick="openDuoLearnApp()" class="px-3 py-2 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-black flex items-center gap-1.5 shrink-0 active:scale-95 shadow-sm cursor-pointer">
+                    <span data-icon="compass" class="w-3.5 h-3.5"></span>
+                    <span>آکادمی داستانی</span>
+                </button>
+                <button type="button" onclick="openQuickReview()" class="px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black flex items-center gap-1.5 shrink-0 active:scale-95 shadow-sm cursor-pointer">
+                    <span data-icon="layers" class="w-3.5 h-3.5"></span>
+                    <span>فلش‌کارت ۳D</span>
+                </button>
+                <button type="button" onclick="document.querySelector('.table-wrapper').scrollIntoView({behavior:'smooth'})" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 border border-slate-700 text-xs font-black flex items-center gap-1.5 shrink-0 active:scale-95 shadow-sm cursor-pointer">
+                    <span data-icon="grid" class="w-3.5 h-3.5"></span>
+                    <span>کاوش جدول</span>
+                </button>
+            </div>
+
             <!-- Bento Grid Control Center -->
             <div id="start-panel" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 text-right mb-8">
                 <!-- Bento Card 1: Main Quiz Mode (Spans 2 columns on desktop) -->
@@ -132,7 +152,7 @@
                 </div>
 
                 <!-- Bento Card 2: Interactive Academy Mode -->
-                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-purple-500/50 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
+                <div class="vf-spotlight-card p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-purple-500/50 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
@@ -649,9 +669,9 @@
     </div>
 
     <!-- Load Application Modules in Precise Order -->
-    <script src="story_map.js"></script>
-    <script src="script.js"></script>
-    <script src="duo_learning.js"></script>
+    <script src="story_map.js?v=8.1"></script>
+    <script src="script.js?v=8.1"></script>
+    <script src="duo_learning.js?v=8.1"></script>
     <script>
         // Initialize VibeFarsi interactive elements
         document.addEventListener('DOMContentLoaded', () => {
@@ -675,7 +695,7 @@
         // Register Service Worker for offline PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(() => {});
+                navigator.serviceWorker.register('sw.js?v=8.1').catch(() => {});
             });
         }
     </script>

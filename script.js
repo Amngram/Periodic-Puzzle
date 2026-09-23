@@ -869,6 +869,16 @@ function registerCorrectAnswer(cell) {
     return gained;
 }
 
+function triggerHaptic(type = 'success') {
+    if (!('vibrate' in navigator)) return;
+    try {
+        if (type === 'success') navigator.vibrate(22);
+        else if (type === 'error') navigator.vibrate([35, 45, 35]);
+        else if (type === 'victory') navigator.vibrate([25, 40, 25, 40, 60]);
+    } catch (e) {}
+}
+window.triggerHaptic = triggerHaptic;
+
 function registerWrongAnswer(cell) {
     comboCount = 0;
     stats.wrong++;
@@ -877,12 +887,13 @@ function registerWrongAnswer(cell) {
     SFX.wrong();
     SFX.lifeLost();
     updateComboDisplay(false);
-    // 💥 screen shake — extra juice
+    triggerHaptic('error');
+    // 💥 screen shake & red peripheral flash — extra juice
     const shakeTarget = document.body;
-    shakeTarget.classList.remove('screen-shake');
+    shakeTarget.classList.remove('screen-shake', 'vf-screen-flash-wrong', 'vf-screen-flash-correct');
     void shakeTarget.offsetWidth;
-    shakeTarget.classList.add('screen-shake');
-    setTimeout(() => shakeTarget.classList.remove('screen-shake'), 500);
+    shakeTarget.classList.add('screen-shake', 'vf-screen-flash-wrong');
+    setTimeout(() => shakeTarget.classList.remove('screen-shake', 'vf-screen-flash-wrong'), 500);
 }
 
 function showCombo(multiplier) {
@@ -941,6 +952,22 @@ function spawnBurst(cell) {
     b.style.setProperty('--burst-color', cell.dataset.colorClass ? 'rgba(5,217,232,0.7)' : '#00ff9f');
     cell.appendChild(b);
     setTimeout(() => b.remove(), 550);
+
+    // Shockwave ripple ring
+    const ring = document.createElement('div');
+    ring.className = 'shockwave-ring';
+    ring.style.setProperty('--burst-color', cell.dataset.colorClass ? 'rgba(5,217,232,0.9)' : '#00ff9f');
+    cell.appendChild(ring);
+    setTimeout(() => ring.remove(), 650);
+
+    triggerHaptic('success');
+
+    // Peripheral screen vignette green glow
+    const bTarget = document.body;
+    bTarget.classList.remove('vf-screen-flash-correct', 'vf-screen-flash-wrong');
+    void bTarget.offsetWidth;
+    bTarget.classList.add('vf-screen-flash-correct');
+    setTimeout(() => bTarget.classList.remove('vf-screen-flash-correct'), 450);
 
     // Multi-particle sparkling firework burst
     try {
@@ -2350,11 +2377,13 @@ function endGame(win) {
         modalMessage.textContent = storySession ? 'مرحله ماجراجویی با موفقیت کامل شد!' : 'شما تمام عناصر را با موفقیت در جایگاه صحیح خود قرار دادید!';
         launchConfetti();
         SFX.victory();
+        triggerHaptic('victory');
     } else {
         modalTitle.innerHTML = `<span class="flex items-center justify-center gap-2"><span>پایان بازی</span> ${getIconSvg('frown', 'w-8 h-8 text-rose-500 inline-block')}</span>`;
         modalTitle.className = 'text-3xl font-extrabold text-rose-500 mb-2';
         modalMessage.innerHTML = `عنصری که نتوانستید پیدا کنید:<br><span class="font-bold text-white text-xl mt-2 inline-block font-english">${currentElement.sym} - ${currentElement.name}</span>`;
         SFX.gameOver();
+        triggerHaptic('error');
     }
 
     // End-game statistics chips
