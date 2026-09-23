@@ -666,7 +666,7 @@
     }
 
     // Real daily streak: one visit per calendar day bumps the counter,
-    // a skipped day resets it — pure Duolingo loop, stored locally.
+    // a skipped day resets it — pure academy loop, stored locally.
     function touchStreakDay() {
         try {
             const today = new Date().toDateString();
@@ -824,7 +824,7 @@
         let currentUnitId = -1;
         let html = '';
 
-        // Motivation banner — Duolingo-style league header (real streak + rank)
+        // Motivation banner — gamified league header (real streak + rank)
         const doneCount = ACADEMY_LESSONS.filter((l, i) => i < academyState.unlockedLevel).length;
         html += `
         <div class="w-full max-w-md mx-auto my-4 px-4">
@@ -1145,7 +1145,14 @@
             academyState.xp += 15;
             saveAcademyProgress();
 
-            sheet.className = 'fixed bottom-0 left-0 right-0 p-5 md:p-6 rounded-t-3xl border-t-2 bg-slate-900/95 backdrop-blur-2xl border-emerald-500 shadow-2xl text-right z-[80] transition-transform transform translate-y-0';
+            // Avatar emotional reaction: joyful leap!
+            const avatarStage = document.querySelector('#duo-stage-content .vf-blobatar-stage');
+            if (avatarStage) {
+                avatarStage.classList.remove('is-idle', 'is-sad', 'is-talking');
+                avatarStage.classList.add('is-happy');
+            }
+
+            sheet.className = 'fixed bottom-0 left-0 right-0 p-5 md:p-6 rounded-t-3xl border-t-2 bg-slate-900/95 backdrop-blur-2xl border-emerald-500 shadow-2xl text-right z-[130] transition-transform transform translate-y-0';
             iconContainer.className = 'w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
             iconContainer.innerHTML = '✓';
             titleEl.className = 'text-base font-black text-emerald-400';
@@ -1155,14 +1162,19 @@
             actionBtn.className = 'vibefarsi-shine px-6 py-3 rounded-2xl font-black text-slate-950 text-sm shadow-[0_4px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[4px] bg-emerald-400 hover:bg-emerald-300 cursor-pointer shrink-0 border-2 border-emerald-200 transition-all';
             actionBtn.textContent = 'عالی، مرحله بعد →';
 
-            if (window.confetti) {
-                try {
-                    window.confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
-                } catch (e) {}
+            if (window.launchConfetti) {
+                window.launchConfetti(70);
             }
         } else {
             if (window.SFX && window.SFX.wrong) window.SFX.wrong();
             academyState.hearts = Math.max(0, academyState.hearts - 1);
+
+            // Avatar emotional reaction: encouraging sad tilt
+            const avatarStage = document.querySelector('#duo-stage-content .vf-blobatar-stage');
+            if (avatarStage) {
+                avatarStage.classList.remove('is-idle', 'is-happy', 'is-talking');
+                avatarStage.classList.add('is-sad');
+            }
 
             // Re-render hearts immediately so the loss is visible
             const heartsBox = document.getElementById('duo-hearts-container');

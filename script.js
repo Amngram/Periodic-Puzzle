@@ -915,17 +915,21 @@ function updateComboDisplay(active) {
 }
 
 /* ============================================================
-   VISUAL FX (popups / bursts / confetti)
+   VISUAL FX (popups / bursts / confetti / mobile nav)
    ============================================================ */
 function showScorePopup(cell, text, color) {
     if (!cell) return;
     const rect = cell.getBoundingClientRect();
     const pop = document.createElement('div');
     pop.className = 'score-popup';
-    pop.textContent = text;
+    if (text.startsWith('+')) {
+        pop.innerHTML = `<span class="inline-flex items-center gap-1 font-english"><span>${text}</span><span style="font-size:0.85em">⚡</span></span>`;
+    } else {
+        pop.textContent = text;
+    }
     pop.style.color = color;
-    pop.style.left = `${rect.left + window.scrollX + rect.width / 2 - 14}px`;
-    pop.style.top = `${rect.top + window.scrollY - 6}px`;
+    pop.style.left = `${rect.left + window.scrollX + rect.width / 2 - 20}px`;
+    pop.style.top = `${rect.top + window.scrollY - 10}px`;
     document.body.appendChild(pop);
     setTimeout(() => pop.remove(), 900);
 }
@@ -937,6 +941,38 @@ function spawnBurst(cell) {
     b.style.setProperty('--burst-color', cell.dataset.colorClass ? 'rgba(5,217,232,0.7)' : '#00ff9f');
     cell.appendChild(b);
     setTimeout(() => b.remove(), 550);
+
+    // Multi-particle sparkling firework burst
+    try {
+        const rect = cell.getBoundingClientRect();
+        const centerX = rect.left + window.scrollX + rect.width / 2;
+        const centerY = rect.top + window.scrollY + rect.height / 2;
+        const colors = ['#00ff9f', '#05d9e8', '#ffc857', '#a855f7', '#38bdf8', '#ff2a6d', '#ffffff'];
+        const shapes = ['✦', '★', '●', '◆', '✶'];
+        const particleCount = 12;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const p = document.createElement('div');
+            p.className = 'spark-particle';
+            p.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+            p.style.color = colors[Math.floor(Math.random() * colors.length)];
+            p.style.fontSize = `${11 + Math.random() * 8}px`;
+            p.style.left = `${centerX}px`;
+            p.style.top = `${centerY}px`;
+            
+            const angle = (i / particleCount) * 2 * Math.PI + (Math.random() - 0.5) * 0.4;
+            const dist = 32 + Math.random() * 45;
+            const dx = Math.cos(angle) * dist;
+            const dy = Math.sin(angle) * dist;
+            
+            p.style.setProperty('--dx', `${dx.toFixed(1)}px`);
+            p.style.setProperty('--dy', `${dy.toFixed(1)}px`);
+            p.style.setProperty('--rot', `${Math.round((Math.random() - 0.5) * 360)}deg`);
+            
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 700);
+        }
+    } catch (e) {}
 }
 
 function launchConfetti(count = 120) {
@@ -959,6 +995,26 @@ function launchConfetti(count = 120) {
     }
     setTimeout(() => container.remove(), 5500);
 }
+
+/* Mobile Periodic Table Quick Navigation */
+window.scrollTableToCol = function(col) {
+    const wrapper = document.querySelector('.table-wrapper');
+    if (!wrapper) return;
+    const colStep = window.innerWidth < 420 ? 37 : 42;
+    const targetScroll = Math.max(0, (col - 1) * colStep - 10);
+    wrapper.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    const cue = document.getElementById('mobile-scroll-cue');
+    if (cue) cue.style.opacity = '0';
+};
+
+window.scrollTableToFBlock = function() {
+    const fBlock = document.querySelector('.element[data-atomic-num="57"]') || document.querySelector('.element[data-atomic-num="89"]');
+    if (fBlock) {
+        fBlock.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    }
+    const cue = document.getElementById('mobile-scroll-cue');
+    if (cue) cue.style.opacity = '0';
+};
 
 /* ============================================================
    TOAST NOTIFICATIONS (VibeFarsi floating stack)
@@ -2157,10 +2213,9 @@ function nextElement() {
     }
     
     // Add pop animation to target box
-    targetBox.style.transform = 'scale(0.8)';
-    setTimeout(() => {
-        targetBox.style.transform = 'scale(1)';
-    }, 150);
+    targetBox.classList.remove('target-pop');
+    void targetBox.offsetWidth;
+    targetBox.classList.add('target-pop');
 
     // Restart the per-question challenge countdown
     startChallengeTimer();
@@ -2311,7 +2366,19 @@ function endGame(win) {
         ${stats.hintsUsed ? `<span class="stat-chip flex items-center gap-1">${getIconSvg('lightbulb', 'w-3.5 h-3.5 text-yellow-300')}<span>راهنما:</span><b>${stats.hintsUsed}</b></span>` : ''}
     `;
     
-    finalScoreEl.textContent = score;
+    // Animate score count-up
+    let displayedScore = 0;
+    const targetScore = Math.max(0, score);
+    const step = Math.max(1, Math.floor(targetScore / 35));
+    finalScoreEl.textContent = '0';
+    const scoreRoll = setInterval(() => {
+        displayedScore += step;
+        if (displayedScore >= targetScore) {
+            displayedScore = targetScore;
+            clearInterval(scoreRoll);
+        }
+        finalScoreEl.textContent = displayedScore;
+    }, 25);
 
     // Story mode: unlock next level instead of leaderboard spam
     if (storySession && win) {

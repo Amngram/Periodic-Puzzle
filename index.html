@@ -30,15 +30,15 @@
     </div>
 
     <!-- Welcome Modal -->
-    <div id="welcome-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 transition-opacity duration-500">
-        <div class="vf-spotlight-card bg-slate-900 border-2 border-cyan-500/80 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl shadow-cyan-500/20 relative overflow-hidden">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-inner">
-                <span data-icon="atom" class="w-9 h-9"></span>
+    <div id="welcome-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex items-center justify-center p-3 sm:p-4 transition-opacity duration-500">
+        <div class="vf-spotlight-card bg-slate-900 border-2 border-cyan-500/80 rounded-3xl p-5 sm:p-8 max-w-md w-full text-center shadow-2xl shadow-cyan-500/20 relative overflow-hidden">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-inner">
+                <span data-icon="atom" class="w-8 h-8 sm:w-9 sm:h-9"></span>
             </div>
-            <h1 class="text-2xl md:text-3xl font-black text-white mb-2 vf-gradient-title">پازل و آزمایشگاه جدول تناوبی</h1>
-            <p class="text-slate-400 mb-6 text-xs md:text-sm">برای ورود به آزمایشگاه و ذخیره دستاوردهایتان، نام خود را وارد کنید:</p>
-            <input type="text" id="player-name-input" placeholder="نام دانشمند..." class="w-full bg-slate-950 text-white font-vazirmatn px-4 py-3.5 rounded-2xl border border-slate-700 focus:outline-none focus:border-cyan-400 mb-4 text-center text-base transition-colors shadow-inner">
-            <button id="submit-name-btn" class="w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black py-4 px-6 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-cyan-200 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer">
+            <h1 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 vf-gradient-title">پازل و آزمایشگاه جدول تناوبی</h1>
+            <p class="text-slate-400 mb-5 sm:mb-6 text-xs sm:text-sm">برای ورود به آزمایشگاه و ذخیره دستاوردهایتان، نام خود را وارد کنید:</p>
+            <input type="text" id="player-name-input" placeholder="نام دانشمند..." class="w-full bg-slate-950 text-white font-vazirmatn px-4 py-3 sm:py-3.5 rounded-2xl border border-slate-700 focus:outline-none focus:border-cyan-400 mb-4 text-center text-sm sm:text-base transition-colors shadow-inner">
+            <button id="submit-name-btn" class="w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black py-3.5 sm:py-4 px-6 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-cyan-200 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base">
                 <span>ورود به آزمایشگاه</span>
                 <span data-icon="arrow-left" class="w-5 h-5"></span>
             </button>
@@ -47,30 +47,30 @@
 
     <div id="main-content" class="pb-16 relative z-10">
         <!-- Hero Section -->
-        <header class="pt-8 md:pt-12 pb-6 px-4 text-center container mx-auto relative">
-            <div class="vf-live-badge mb-3">
+        <header class="pt-6 sm:pt-8 md:pt-12 pb-5 sm:pb-6 px-3 sm:px-4 text-center container mx-auto relative">
+            <div class="vf-live-badge mb-2.5 sm:mb-3">
                 <span class="vf-live-dot"></span>
-                <span class="font-bold tracking-wide">آزمایشگاه هوشمند شیمی • نسخه پیشرفته مندلیف</span>
+                <span class="font-bold tracking-wide text-[11px] sm:text-xs">آزمایشگاه هوشمند شیمی • نسخه پیشرفته مندلیف</span>
             </div>
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-black mb-3 text-white tracking-tight vf-gradient-title">
+            <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-2.5 sm:mb-3 text-white tracking-tight vf-gradient-title">
                 پازل و آزمایشگاه جدول تناوبی
             </h1>
-            <p class="max-w-2xl mx-auto text-xs md:text-base text-slate-300 mb-8 font-medium leading-relaxed">
+            <p class="max-w-2xl mx-auto text-xs sm:text-sm md:text-base text-slate-300 mb-6 sm:mb-8 font-medium leading-relaxed px-1">
                 سفری هیجان‌انگیز به اعماق ۱۱۸ عنصر کیهان؛ با مربیان هوشمند گپ بزنید، فلش‌کارت‌های سه‌بعدی را بچرخانید و جدول را فتح کنید!
             </p>
 
             <!-- Setup Instructions for selecting custom elements -->
-            <div id="selection-instruction" class="max-w-2xl mx-auto text-xs md:text-sm text-cyan-300 bg-slate-900/90 border border-cyan-500/40 p-4 rounded-3xl mb-6 text-center hidden flex flex-col gap-3 shadow-xl">
+            <div id="selection-instruction" class="max-w-2xl mx-auto text-xs sm:text-sm text-cyan-300 bg-slate-900/90 border border-cyan-500/40 p-3 sm:p-4 rounded-3xl mb-6 text-center hidden flex flex-col gap-3 shadow-xl">
                 <p class="font-bold flex items-center justify-center gap-2">
                     <span data-icon="mouse-pointer-click" class="w-5 h-5 text-cyan-400 shrink-0"></span>
                     <span>روی عناصر در جدول زیر کلیک کنید تا سبز شوند و در آزمون شما قرار گیرند.</span>
                 </p>
                 <div class="flex gap-3 justify-center mt-1">
-                    <button onclick="selectAllCustom(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-4 py-2 rounded-xl transition-all font-bold flex items-center gap-1.5 shadow-md">
+                    <button onclick="selectAllCustom(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-4 py-2 rounded-xl transition-all font-bold flex items-center gap-1.5 shadow-md cursor-pointer">
                         <span data-icon="check-check" class="w-4 h-4"></span>
                         <span>انتخاب همه</span>
                     </button>
-                    <button onclick="selectAllCustom(false)" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-4 py-2 rounded-xl transition-all font-bold flex items-center gap-1.5 shadow-md">
+                    <button onclick="selectAllCustom(false)" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-4 py-2 rounded-xl transition-all font-bold flex items-center gap-1.5 shadow-md cursor-pointer">
                         <span data-icon="trash-2" class="w-4 h-4"></span>
                         <span>پاک کردن همه</span>
                     </button>
@@ -78,11 +78,11 @@
             </div>
 
             <!-- Bento Grid Control Center -->
-            <div id="start-panel" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 text-right mb-8">
+            <div id="start-panel" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 text-right mb-8">
                 <!-- Bento Card 1: Main Quiz Mode (Spans 2 columns on desktop) -->
-                <div class="vf-spotlight-card md:col-span-2 p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-cyan-500/40 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
+                <div class="vf-spotlight-card md:col-span-2 p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-cyan-500/40 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
                     <div>
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center justify-between mb-3 sm:mb-4">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                                 حالت آزمون اصلی
                             </span>
@@ -157,7 +157,7 @@
                 </div>
 
                 <!-- Bento Card 3: 3D Quick Review Flashcards -->
-                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-emerald-500/50 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
+                <div class="vf-spotlight-card p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-emerald-500/50 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
@@ -171,14 +171,14 @@
                         </p>
                     </div>
 
-                    <button id="quick-review-btn" onclick="openQuickReview()" class="w-full bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black py-3.5 px-4 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-emerald-200 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-sm">
+                    <button id="quick-review-btn" onclick="openQuickReview()" class="w-full bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black py-3.5 px-4 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-emerald-200 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm">
                         <span data-icon="layers" class="w-4 h-4"></span>
                         <span>باز کردن فلش‌کارت‌ها</span>
                     </button>
                 </div>
 
                 <!-- Bento Card 4: Progress Heatmap & Leaderboard -->
-                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border border-slate-800">
+                <div class="vf-spotlight-card p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border border-slate-800">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
@@ -205,7 +205,7 @@
                 </div>
 
                 <!-- Bento Card 5: Timer Speed Challenge Switch -->
-                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border border-slate-800">
+                <div class="vf-spotlight-card p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border border-slate-800">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
@@ -229,61 +229,64 @@
             <!-- Old map modal button bridge (hidden but kept for script compatibility) -->
             <button id="story-map-btn" class="hidden"></button>
 
-            <!-- Game Dashboard with VibeFarsi Stat Widgets -->
-            <div id="game-dashboard" class="hidden max-w-4xl mx-auto bg-slate-900/90 backdrop-blur-xl p-5 md:p-6 rounded-3xl border border-slate-700 shadow-2xl mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
-                <!-- Target Element Card with Rotating Border Beam -->
-                <div class="flex-1 text-center border-b md:border-b-0 md:border-l border-slate-700/80 pb-4 md:pb-0 md:pl-6 w-full">
-                    <p class="text-slate-400 text-xs mb-2 font-bold">عنصر مورد نظر را روی جدول کلیک کنید:</p>
-                    <div id="target-element-box" class="target-element-card mx-auto font-english font-black flex flex-col justify-center items-center shadow-2xl">
-                        <span id="target-symbol" class="text-4xl md:text-5xl leading-none font-black text-white">?</span>
+            <!-- Game Dashboard with VibeFarsi Stat Widgets (Sticky Responsive HUD on mobile) -->
+            <div id="game-dashboard" class="hidden max-w-4xl mx-auto bg-slate-900/90 backdrop-blur-xl p-3 md:p-6 rounded-2xl md:rounded-3xl border border-slate-700 shadow-2xl mb-4 md:mb-8 flex flex-col gap-3 md:gap-6">
+                <!-- Main Controls Row -->
+                <div class="dashboard-main-row flex flex-col md:flex-row items-center justify-between gap-3 md:gap-6 w-full">
+                    <!-- Target Element Card with Rotating Border Beam -->
+                    <div class="dashboard-target-wrap flex-1 text-center border-b md:border-b-0 md:border-l border-slate-700/80 pb-3 md:pb-0 md:pl-6 w-full">
+                        <p class="text-slate-400 text-xs mb-1.5 md:mb-2 font-bold hidden md:block">عنصر مورد نظر را روی جدول کلیک کنید:</p>
+                        <div id="target-element-box" class="target-element-card mx-auto font-english font-black flex flex-col justify-center items-center shadow-2xl">
+                            <span id="target-symbol" class="text-3xl sm:text-4xl md:text-5xl leading-none font-black text-white">?</span>
+                        </div>
+                        <p id="target-name" class="text-cyan-300 text-xs md:text-sm mt-1.5 md:mt-2.5 min-h-[18px] md:min-h-[20px] font-black"></p>
                     </div>
-                    <p id="target-name" class="text-cyan-300 text-sm mt-2.5 min-h-[20px] font-black"></p>
-                </div>
 
-                <!-- VibeFarsi Stat Widgets Grid -->
-                <div class="flex-1 grid grid-cols-3 gap-3 w-full">
-                    <div class="vf-stat-card text-center">
-                        <span class="text-slate-400 text-[11px] font-bold block mb-1">امتیاز</span>
-                        <p id="score" class="text-2xl font-black text-cyan-400 font-english">0</p>
-                        <p id="combo-display" class="text-[11px] font-bold text-orange-400 h-4 font-english mt-0.5"></p>
+                    <!-- VibeFarsi Stat Widgets Grid -->
+                    <div class="dashboard-stats-grid flex-1 grid grid-cols-3 gap-2 md:gap-3 w-full">
+                        <div class="vf-stat-card text-center p-2 md:p-3">
+                            <span class="text-slate-400 text-[10px] md:text-[11px] font-bold block mb-0.5 md:mb-1">امتیاز</span>
+                            <p id="score" class="text-lg md:text-2xl font-black text-cyan-400 font-english">0</p>
+                            <p id="combo-display" class="text-[10px] md:text-[11px] font-bold text-orange-400 h-3 md:h-4 font-english mt-0.5"></p>
+                        </div>
+                        <div class="vf-stat-card text-center p-2 md:p-3">
+                            <span class="text-slate-400 text-[10px] md:text-[11px] font-bold block mb-0.5 md:mb-1">زمان</span>
+                            <p id="timer" class="text-lg md:text-2xl font-black text-white font-english">00:00</p>
+                            <span class="text-[9px] md:text-[10px] text-slate-500 font-bold block mt-0.5 hidden md:block">کرونومتر</span>
+                        </div>
+                        <div class="vf-stat-card text-center p-2 md:p-3">
+                            <span class="text-slate-400 text-[10px] md:text-[11px] font-bold block mb-0.5 md:mb-1">جان‌ها</span>
+                            <div id="lives" class="flex items-center justify-center gap-0.5 md:gap-1 min-h-[24px] md:min-h-[32px]"></div>
+                            <span class="text-[9px] md:text-[10px] text-rose-400 font-bold block mt-0.5 hidden md:block">فرصت</span>
+                        </div>
                     </div>
-                    <div class="vf-stat-card text-center">
-                        <span class="text-slate-400 text-[11px] font-bold block mb-1">زمان</span>
-                        <p id="timer" class="text-2xl font-black text-white font-english">00:00</p>
-                        <span class="text-[10px] text-slate-500 font-bold block mt-0.5">کرونومتر</span>
-                    </div>
-                    <div class="vf-stat-card text-center">
-                        <span class="text-slate-400 text-[11px] font-bold block mb-1">جان‌ها</span>
-                        <div id="lives" class="flex items-center justify-center gap-1 min-h-[32px]"></div>
-                        <span class="text-[10px] text-rose-400 font-bold block mt-0.5">فرصت باقی‌مانده</span>
+
+                    <!-- Controls -->
+                    <div class="dashboard-controls-wrap flex flex-row md:flex-col gap-2 w-full md:w-auto shrink-0">
+                        <button id="hint-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-3 md:px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl transition-all shadow-[0_4px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[4px] border-2 border-emerald-300 flex items-center justify-center gap-1.5 cursor-pointer" title="راهنما با ۵ امتیاز جریمه">
+                            <span data-icon="lightbulb" class="w-4 h-4 text-yellow-300"></span>
+                            <span>راهنما</span>
+                            <span class="font-english text-[10px] md:text-[11px]">(-5)</span>
+                        </button>
+                        <button id="quit-game-btn" class="flex-1 md:flex-none bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold px-3 md:px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl transition-all flex items-center justify-center gap-1.5 border border-slate-700 shadow-md cursor-pointer" title="خروج از بازی">
+                            <span data-icon="log-out" class="w-4 h-4"></span>
+                            <span>خروج</span>
+                        </button>
                     </div>
                 </div>
 
                 <!-- Quiz progress: answered / total (VibeFarsi progress component) -->
-                <div class="w-full mt-1">
-                    <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 mb-1.5">
+                <div class="dashboard-progress-wrap w-full mt-1">
+                    <div class="flex items-center justify-between text-[10px] md:text-[11px] font-bold text-slate-400 mb-1">
                         <span class="flex items-center gap-1.5">
                             <span data-icon="target" class="w-3.5 h-3.5 text-cyan-400"></span>
                             <span>پیشرفت آزمون</span>
                         </span>
                         <span id="quiz-progress-text" class="font-english text-cyan-300">0 / 0</span>
                     </div>
-                    <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                    <div class="w-full bg-slate-950 rounded-full h-2 md:h-2.5 overflow-hidden border border-slate-800">
                         <div id="quiz-progress-fill" class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
-                </div>
-
-                <!-- Controls -->
-                <div class="flex flex-row md:flex-col gap-2 w-full md:w-auto">
-                    <button id="hint-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-4 py-3 rounded-2xl transition-all shadow-[0_4px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[4px] border-2 border-emerald-300 flex items-center justify-center gap-1.5 cursor-pointer" title="راهنما با ۵ امتیاز جریمه">
-                        <span data-icon="lightbulb" class="w-4 h-4 text-yellow-300"></span>
-                        <span>راهنما</span>
-                        <span class="font-english text-[11px]">(-5)</span>
-                    </button>
-                    <button id="quit-game-btn" class="flex-1 md:flex-none bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold px-4 py-3 rounded-2xl transition-all flex items-center justify-center gap-1.5 border border-slate-700 shadow-md cursor-pointer" title="خروج از بازی">
-                        <span data-icon="log-out" class="w-4 h-4"></span>
-                        <span>خروج</span>
-                    </button>
                 </div>
             </div>
 
@@ -294,7 +297,26 @@
         </header>
 
         <!-- Periodic Table Section -->
-        <main class="container mx-auto px-2 pb-10">
+        <main class="container mx-auto px-1 sm:px-2 pb-10">
+            <!-- Mobile Periodic Table Quick Nav (Visible only on mobile/tablet) -->
+            <div id="mobile-table-nav" class="flex md:hidden items-center justify-between gap-1 overflow-x-auto py-1 px-1 mb-2 text-xs font-bold no-scrollbar">
+                <button type="button" onclick="scrollTableToCol(1)" class="px-2.5 py-1.5 rounded-xl bg-slate-800/90 text-slate-300 border border-slate-700/80 active:bg-cyan-500 active:text-slate-950 flex items-center gap-1 shrink-0 transition-colors shadow-sm cursor-pointer">
+                    <span>گروه ۱-۲</span>
+                </button>
+                <button type="button" onclick="scrollTableToCol(4)" class="px-2.5 py-1.5 rounded-xl bg-slate-800/90 text-slate-300 border border-slate-700/80 active:bg-cyan-500 active:text-slate-950 flex items-center gap-1 shrink-0 transition-colors shadow-sm cursor-pointer">
+                    <span>واسطه (۳-۱۲)</span>
+                </button>
+                <button type="button" onclick="scrollTableToCol(13)" class="px-2.5 py-1.5 rounded-xl bg-slate-800/90 text-slate-300 border border-slate-700/80 active:bg-cyan-500 active:text-slate-950 flex items-center gap-1 shrink-0 transition-colors shadow-sm cursor-pointer">
+                    <span>گروه ۱۳-۱۸</span>
+                </button>
+                <button type="button" onclick="scrollTableToFBlock()" class="px-2.5 py-1.5 rounded-xl bg-slate-800/90 text-slate-300 border border-slate-700/80 active:bg-cyan-500 active:text-slate-950 flex items-center gap-1 shrink-0 transition-colors shadow-sm cursor-pointer">
+                    <span>لانتانید / اکتینید</span>
+                </button>
+            </div>
+            <div id="mobile-scroll-cue" class="md:hidden text-center text-[11px] text-cyan-400/90 mb-1.5 flex items-center justify-center gap-1.5 transition-opacity duration-500 select-none">
+                <span>👈 جدول را برای دیدن تمام ۱۸ ستون به چپ و راست بکشید 👉</span>
+            </div>
+
             <div class="table-wrapper">
                 <div id="periodic-table" class="periodic-grid" dir="ltr">
                 <!-- Table will be generated here -->
@@ -543,32 +565,32 @@
     </div>
 
     <!-- Element Info Modal (Fixed: Close button is safely at top-left with generous title padding) -->
-    <div id="element-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
-        <div id="element-modal-content" class="bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 max-w-lg w-full text-center shadow-2xl relative transform transition-all scale-100" onclick="event.stopPropagation()">
+    <div id="element-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-3 sm:p-4">
+        <div id="element-modal-content" class="bg-slate-900 border-2 border-slate-700 rounded-3xl p-4 sm:p-6 max-w-lg w-full text-center shadow-2xl relative transform transition-all scale-100 max-h-[92vh] overflow-y-auto" onclick="event.stopPropagation()">
             <!-- Close button safely on the top-left in RTL -->
-            <button id="close-element-btn" class="absolute top-4 left-4 text-slate-400 hover:text-white hover:bg-slate-800 bg-slate-950/80 border border-slate-700 p-2.5 rounded-full z-20 transition-all shadow-md focus:outline-none cursor-pointer" title="بستن">
+            <button id="close-element-btn" class="absolute top-3.5 left-3.5 text-slate-400 hover:text-white hover:bg-slate-800 bg-slate-950/80 border border-slate-700 p-2 sm:p-2.5 rounded-full z-20 transition-all shadow-md focus:outline-none cursor-pointer" title="بستن">
                 <span data-icon="x" class="w-5 h-5"></span>
             </button>
-            <div class="flex justify-between items-center mb-4 mt-1 pe-2 ps-14">
+            <div class="flex justify-between items-center mb-3 sm:mb-4 mt-1 pe-2 ps-12 sm:ps-14">
                 <div class="text-right">
-                    <h2 id="info-name" class="text-2xl md:text-3xl font-black text-white"></h2>
+                    <h2 id="info-name" class="text-xl sm:text-2xl md:text-3xl font-black text-white"></h2>
                     <p id="info-cat" class="text-xs md:text-sm font-bold mt-1 px-3 py-1 rounded-full inline-block"></p>
                 </div>
-                <div class="text-left font-english text-4xl md:text-5xl font-black" id="info-sym" style="color: var(--c-alkali)"></div>
+                <div class="text-left font-english text-3xl sm:text-4xl md:text-5xl font-black" id="info-sym" style="color: var(--c-alkali)"></div>
             </div>
             
-            <div class="bg-slate-950 rounded-2xl p-4 mb-4 flex justify-center items-center border border-slate-800">
-                <div id="bohr-model" class="w-64 h-64"></div>
+            <div class="bg-slate-950 rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4 flex justify-center items-center border border-slate-800">
+                <div id="bohr-model" class="w-44 h-44 sm:w-60 sm:h-60 max-w-full"></div>
             </div>
             
-            <div class="bg-slate-800/60 rounded-2xl p-4 text-right text-slate-300 text-sm leading-relaxed border border-slate-700/60" id="info-desc">
+            <div class="bg-slate-800/60 rounded-2xl p-3.5 sm:p-4 text-right text-slate-300 text-xs sm:text-sm leading-relaxed border border-slate-700/60" id="info-desc">
             </div>
         </div>
     </div>
 
     <!-- Leaderboard Modal -->
-    <div id="leaderboard-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div id="leaderboard-modal-content" class="bg-slate-900 border-2 border-yellow-500/80 rounded-3xl p-6 md:p-8 max-w-md w-full text-center shadow-2xl shadow-yellow-500/20 relative max-h-[85vh] flex flex-col justify-between" onclick="event.stopPropagation()">
+    <div id="leaderboard-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div id="leaderboard-modal-content" class="bg-slate-900 border-2 border-yellow-500/80 rounded-3xl p-5 sm:p-6 md:p-8 max-w-md w-full text-center shadow-2xl shadow-yellow-500/20 relative max-h-[85vh] flex flex-col justify-between" onclick="event.stopPropagation()">
             <div>
                 <div class="flex items-center justify-center gap-2 mb-6">
                     <span data-icon="trophy" class="w-7 h-7 text-yellow-400"></span>
@@ -608,18 +630,18 @@
     </div>
 
     <!-- Game Over Modal -->
-    <div id="game-over-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border-2 border-cyan-500 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl shadow-cyan-500/20 transform transition-all scale-100">
-            <h2 id="modal-title" class="text-2xl md:text-3xl font-black text-white mb-2">پایان بازی</h2>
-            <p id="modal-message" class="text-slate-300 mb-6 text-sm leading-relaxed"></p>
-            <div class="flex justify-center gap-4 text-left font-english text-xl font-bold bg-slate-950 p-4 rounded-2xl mb-4 border border-slate-800">
+    <div id="game-over-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-900 border-2 border-cyan-500 rounded-3xl p-5 sm:p-8 max-w-md w-full text-center shadow-2xl shadow-cyan-500/20 transform transition-all scale-100">
+            <h2 id="modal-title" class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2">پایان بازی</h2>
+            <p id="modal-message" class="text-slate-300 mb-5 sm:mb-6 text-xs sm:text-sm leading-relaxed"></p>
+            <div class="flex justify-center gap-4 text-left font-english text-xl font-bold bg-slate-950 p-3.5 sm:p-4 rounded-2xl mb-4 border border-slate-800">
                 <div class="text-cyan-400 text-center w-full">
                     <span class="block text-xs text-slate-400 font-vazirmatn font-normal mb-1">امتیاز نهایی</span>
-                    <span id="final-score" class="text-3xl font-black">0</span>
+                    <span id="final-score" class="text-3xl sm:text-4xl font-black">0</span>
                 </div>
             </div>
             <div id="end-stats" class="stat-chips mb-4"></div>
-            <button id="restart-btn" class="w-full bg-rose-500 hover:bg-rose-400 text-white font-black py-4 px-6 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-rose-300 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer">
+            <button id="restart-btn" class="w-full bg-rose-500 hover:bg-rose-400 text-white font-black py-3.5 sm:py-4 px-6 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-rose-300 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base">
                 <span data-icon="refresh-cw" class="w-4 h-4"></span>
                 <span>شروع مجدد آزمون</span>
             </button>
