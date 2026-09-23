@@ -18,7 +18,7 @@
 </head>
 <body class="bg-slate-950 min-h-screen text-slate-100 font-vazirmatn antialiased selection:bg-cyan-500 selection:text-white relative overflow-x-hidden">
 
-    <!-- VibeFarsi Retro Grid Animated Floor Background -->
+    <!-- VibeFarsi Retro Grid Static Floor Background (calmed: low opacity, no motion) -->
     <div class="retro-grid-bg" aria-hidden="true"></div>
 
     <!-- Floating Toast Notification System -->
@@ -38,7 +38,7 @@
             <h1 class="text-2xl md:text-3xl font-black text-white mb-2 vf-gradient-title">پازل و آزمایشگاه جدول تناوبی</h1>
             <p class="text-slate-400 mb-6 text-xs md:text-sm">برای ورود به آزمایشگاه و ذخیره دستاوردهایتان، نام خود را وارد کنید:</p>
             <input type="text" id="player-name-input" placeholder="نام دانشمند..." class="w-full bg-slate-950 text-white font-vazirmatn px-4 py-3.5 rounded-2xl border border-slate-700 focus:outline-none focus:border-cyan-400 mb-4 text-center text-base transition-colors shadow-inner">
-            <button id="submit-name-btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black py-4 px-6 rounded-2xl transition-all shadow-xl shadow-cyan-500/25 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer">
+            <button id="submit-name-btn" class="w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black py-4 px-6 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-cyan-200 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer">
                 <span>ورود به آزمایشگاه</span>
                 <span data-icon="arrow-left" class="w-5 h-5"></span>
             </button>
@@ -80,7 +80,7 @@
             <!-- Bento Grid Control Center -->
             <div id="start-panel" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 text-right mb-8">
                 <!-- Bento Card 1: Main Quiz Mode (Spans 2 columns on desktop) -->
-                <div class="vf-spotlight-card md:col-span-2 p-6 flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-slate-900/90 to-slate-900/60 border border-slate-800">
+                <div class="vf-spotlight-card md:col-span-2 p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-cyan-500/40 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
@@ -125,14 +125,14 @@
                         </div>
                     </div>
 
-                    <button id="start-btn" class="w-full bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 hover:brightness-110 text-slate-950 font-black py-4 px-6 rounded-2xl transition-all shadow-xl shadow-cyan-500/25 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-base">
+                    <button id="start-btn" class="w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black py-4 px-6 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] hover:shadow-[0_7px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-base border-2 border-cyan-200">
                         <span data-icon="play" class="w-5 h-5 fill-current"></span>
                         <span>شروع آزمون پازل</span>
                     </button>
                 </div>
 
                 <!-- Bento Card 2: Interactive Academy Mode -->
-                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-purple-950/40 via-slate-900 to-slate-900/80 border border-purple-500/40 shadow-xl shadow-purple-500/10">
+                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-purple-500/50 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
@@ -150,14 +150,14 @@
                         </div>
                     </div>
 
-                    <button onclick="openDuoLearnApp()" class="w-full bg-gradient-to-r from-purple-500 to-fuchsia-600 hover:brightness-110 text-white font-black py-3.5 px-4 rounded-2xl transition-all shadow-lg shadow-purple-500/25 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-sm">
+                    <button onclick="openDuoLearnApp()" class="w-full bg-purple-500 hover:bg-purple-400 text-white font-black py-3.5 px-4 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-purple-300 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-sm">
                         <span data-icon="compass" class="w-4 h-4"></span>
                         <span>ورود به آکادمی فتح جدول</span>
                     </button>
                 </div>
 
                 <!-- Bento Card 3: 3D Quick Review Flashcards -->
-                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900/80 border border-emerald-500/40 shadow-xl shadow-emerald-500/10">
+                <div class="vf-spotlight-card p-6 flex flex-col justify-between relative overflow-hidden bg-slate-900 border-2 border-emerald-500/50 shadow-[0_5px_0_rgba(2,6,23,0.9)]">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
@@ -171,7 +171,7 @@
                         </p>
                     </div>
 
-                    <button id="quick-review-btn" onclick="openQuickReview()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:brightness-110 text-slate-950 font-black py-3.5 px-4 rounded-2xl transition-all shadow-lg shadow-emerald-500/25 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-sm">
+                    <button id="quick-review-btn" onclick="openQuickReview()" class="w-full bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black py-3.5 px-4 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-emerald-200 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer text-sm">
                         <span data-icon="layers" class="w-4 h-4"></span>
                         <span>باز کردن فلش‌کارت‌ها</span>
                     </button>
@@ -234,7 +234,7 @@
                 <!-- Target Element Card with Rotating Border Beam -->
                 <div class="flex-1 text-center border-b md:border-b-0 md:border-l border-slate-700/80 pb-4 md:pb-0 md:pl-6 w-full">
                     <p class="text-slate-400 text-xs mb-2 font-bold">عنصر مورد نظر را روی جدول کلیک کنید:</p>
-                    <div id="target-element-box" class="target-element-card mx-auto font-english font-black flex flex-col justify-center items-center vibefarsi-beam shadow-2xl">
+                    <div id="target-element-box" class="target-element-card mx-auto font-english font-black flex flex-col justify-center items-center shadow-2xl">
                         <span id="target-symbol" class="text-4xl md:text-5xl leading-none font-black text-white">?</span>
                     </div>
                     <p id="target-name" class="text-cyan-300 text-sm mt-2.5 min-h-[20px] font-black"></p>
@@ -269,13 +269,13 @@
                         <span id="quiz-progress-text" class="font-english text-cyan-300">0 / 0</span>
                     </div>
                     <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
-                        <div id="quiz-progress-fill" class="bg-gradient-to-l from-cyan-400 via-emerald-400 to-cyan-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        <div id="quiz-progress-fill" class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
 
                 <!-- Controls -->
                 <div class="flex flex-row md:flex-col gap-2 w-full md:w-auto">
-                    <button id="hint-btn" class="flex-1 md:flex-none bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-3 rounded-2xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer" title="راهنما با ۵ امتیاز جریمه">
+                    <button id="hint-btn" class="flex-1 md:flex-none bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-4 py-3 rounded-2xl transition-all shadow-[0_4px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[4px] border-2 border-emerald-300 flex items-center justify-center gap-1.5 cursor-pointer" title="راهنما با ۵ امتیاز جریمه">
                         <span data-icon="lightbulb" class="w-4 h-4 text-yellow-300"></span>
                         <span>راهنما</span>
                         <span class="font-english text-[11px]">(-5)</span>
@@ -317,26 +317,26 @@
          ============================================================ -->
     <div id="duo-learn-app" class="fixed inset-0 z-[120] bg-slate-950 flex flex-col text-slate-100 overflow-hidden hidden select-none">
         <!-- App Top Navigation Bar -->
-        <div class="h-16 shrink-0 bg-slate-900/90 border-b border-slate-800/80 backdrop-blur-xl px-4 flex items-center justify-between z-20">
+        <div class="h-16 shrink-0 bg-slate-900 border-b-4 border-slate-800 px-4 flex items-center justify-between z-20">
             <div class="flex items-center gap-3">
-                <button type="button" onclick="closeDuoLearnApp()" class="w-10 h-10 rounded-2xl bg-slate-800/80 border border-slate-700/60 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer" title="خروج به سایت اصلی">
+                <button type="button" onclick="closeDuoLearnApp()" class="w-10 h-10 rounded-2xl bg-slate-800 border-2 border-slate-700 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-[0_3px_0_rgba(0,0,0,0.5)] active:shadow-none active:translate-y-[3px]" title="خروج به سایت اصلی">
                     <span data-icon="x" class="w-5 h-5"></span>
                 </button>
                 <div class="flex items-center gap-2">
-                    <span class="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400">
+                    <span class="w-8 h-8 rounded-xl bg-purple-500 border-2 border-purple-300 flex items-center justify-center text-white shadow-[0_3px_0_rgba(0,0,0,0.5)]">
                         <span data-icon="compass" class="w-4 h-4"></span>
                     </span>
-                    <span class="font-black text-sm md:text-base text-white">آکادمی فتح جدول تناوبی (مکان‌یابی عناصر)</span>
+                    <span class="font-black text-sm md:text-base text-white">آکادمی فتح جدول تناوبی</span>
                 </div>
             </div>
 
             <!-- Stats Bar -->
-            <div class="flex items-center gap-3 md:gap-5 text-xs md:text-sm font-bold">
-                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-slate-700/60 text-orange-400">
+            <div class="flex items-center gap-2 md:gap-3 text-xs md:text-sm font-black">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 border-2 border-orange-500/60 text-orange-400 shadow-[0_3px_0_rgba(0,0,0,0.5)]">
                     <span data-icon="flame" class="w-4 h-4 fill-current"></span>
                     <span id="duo-stat-streak">۳ روز</span>
                 </div>
-                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-slate-700/60 text-cyan-400 font-english">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 border-2 border-cyan-500/60 text-cyan-400 font-english shadow-[0_3px_0_rgba(0,0,0,0.5)]">
                     <span data-icon="sparkles" class="w-4 h-4"></span>
                     <span id="duo-stat-xp">۰ XP</span>
                 </div>
@@ -354,11 +354,11 @@
         <div id="duo-lesson-view" class="flex-1 flex flex-col hidden overflow-y-auto relative bg-slate-950 p-4 md:p-8">
             <!-- Lesson Header with Progress and Hearts -->
             <div class="max-w-xl mx-auto w-full flex items-center justify-between gap-4 mb-6">
-                <button type="button" onclick="returnToDuoPath()" class="text-slate-400 hover:text-white p-2 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer" title="بازگشت به نقشه">
+                <button type="button" onclick="returnToDuoPath()" class="text-slate-300 hover:text-white p-2 rounded-xl bg-slate-800 border-2 border-slate-700 cursor-pointer shadow-[0_3px_0_rgba(0,0,0,0.5)] active:shadow-none active:translate-y-[3px] transition-all" title="بازگشت به نقشه">
                     <span data-icon="arrow-right" class="w-5 h-5"></span>
                 </button>
-                <div class="flex-1 bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-800">
-                    <div id="duo-lesson-progress-fill" class="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div class="flex-1 bg-slate-800 rounded-full h-4 overflow-hidden border-2 border-slate-700">
+                    <div id="duo-lesson-progress-fill" class="bg-emerald-400 h-full rounded-full transition-all duration-300 border-r-4 border-emerald-200" style="width: 0%"></div>
                 </div>
                 <div id="duo-hearts-container" class="flex items-center gap-1 shrink-0">
                     <!-- 3 Hearts -->
@@ -442,7 +442,7 @@
                 <span id="review-mastery-badge" class="text-emerald-400 font-english font-black">تسلط: ۰٪</span>
             </div>
             <div class="w-full bg-slate-950 rounded-full h-2 mb-3 overflow-hidden border border-slate-800">
-                <div id="review-progress-fill" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-300" style="width: 1%"></div>
+                <div id="review-progress-fill" class="bg-emerald-400 h-full rounded-full transition-all duration-300" style="width: 1%"></div>
             </div>
 
             <!-- VibeFarsi 3D FlipCard (Fixed 3D Context without overflow-hidden) -->
@@ -619,7 +619,7 @@
                 </div>
             </div>
             <div id="end-stats" class="stat-chips mb-4"></div>
-            <button id="restart-btn" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:brightness-110 text-white font-black py-4 px-6 rounded-2xl transition-all shadow-xl shadow-rose-500/30 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer">
+            <button id="restart-btn" class="w-full bg-rose-500 hover:bg-rose-400 text-white font-black py-4 px-6 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-rose-300 vibefarsi-shine flex items-center justify-center gap-2 cursor-pointer">
                 <span data-icon="refresh-cw" class="w-4 h-4"></span>
                 <span>شروع مجدد آزمون</span>
             </button>

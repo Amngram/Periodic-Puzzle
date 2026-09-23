@@ -21,7 +21,12 @@
             color: '#06b6d4',
             accentBg: 'rgba(6, 182, 212, 0.15)',
             accentBorder: '#06b6d4',
-            quote: 'جایگاه هر عنصر در سطر و ستون، شناسنامه ابدی اونه!'
+            quote: 'جایگاه هر عنصر در سطر و ستون، شناسنامه ابدی اونه!',
+            quotes: [
+                'جایگاه هر عنصر در سطر و ستون، شناسنامه ابدی اونه!',
+                'من جدول را در خواب دیدم — تو آن را در ذهن ثبت کن!',
+                'سطر یعنی طبقه، ستون یعنی خانواده؛ همین و بس!'
+            ]
         },
         curie: {
             id: 'curie',
@@ -31,7 +36,12 @@
             color: '#a855f7',
             accentBg: 'rgba(168, 85, 247, 0.15)',
             accentBorder: '#a855f7',
-            quote: 'سنگین‌ترین عناصر جدول در پایین‌ترین سطرها منتظر کشف تو هستن!'
+            quote: 'سنگین‌ترین عناصر جدول در پایین‌ترین سطرها منتظر کشف تو هستن!',
+            quotes: [
+                'سنگین‌ترین عناصر جدول در پایین‌ترین سطرها منتظر کشف تو هستن!',
+                'دو جایزه نوبل گرفتم چون از تاریکی نترسیدم — ردیف پایین جدول هم تاریک است، بدرخش!',
+                'رادیوم در تاریکی می‌درخشید؛ حافظه تو هم با تکرار می‌درخشد.'
+            ]
         },
         bohr: {
             id: 'bohr',
@@ -41,7 +51,12 @@
             color: '#10b981',
             accentBg: 'rgba(16, 185, 129, 0.15)',
             accentBorder: '#10b981',
-            quote: 'تعداد لایه‌های الکترونی اتم، دقیقاً شماره سطر جدول رو می‌سازه!'
+            quote: 'تعداد لایه‌های الکترونی اتم، دقیقاً شماره سطر جدول رو می‌سازه!',
+            quotes: [
+                'تعداد لایه‌های الکترونی اتم، دقیقاً شماره سطر جدول رو می‌سازه!',
+                'هر سطر جدول یک لایه الکترونی است — از هسته بشمار!',
+                'اتم‌ها مثل پیاز لایه‌لایه‌اند؛ جدول هم همین‌طور.'
+            ]
         },
         neon: {
             id: 'neon',
@@ -51,7 +66,12 @@
             color: '#f59e0b',
             accentBg: 'rgba(245, 158, 11, 0.15)',
             accentBorder: '#f59e0b',
-            quote: 'ستون آخر سمت راست مال ماست، امن و واکنش‌ناپذیر!'
+            quote: 'ستون آخر سمت راست مال ماست، امن و واکنش‌ناپذیر!',
+            quotes: [
+                'ستون آخر سمت راست مال ماست، امن و واکنش‌ناپذیر!',
+                'ما گازهای نجیب با هیچ‌کس قاطی نمی‌شویم — جز با حافظه تو!',
+                'ستون ۱۸، خانه آخر سمت راست؛ امن‌ترین آدرس جدول!'
+            ]
         }
     };
 
@@ -626,7 +646,7 @@
         currentStepIdx: 0,
         hearts: 3,
         xp: 0,
-        streakDays: 3,
+        streakDays: 1,
         selectedOption: null,
         isAnswerChecked: false
     };
@@ -641,7 +661,33 @@
                 academyState.xp = data.xp || 0;
             }
         } catch (e) {}
+        touchStreakDay();
         updateHeaderStats();
+    }
+
+    // Real daily streak: one visit per calendar day bumps the counter,
+    // a skipped day resets it — pure Duolingo loop, stored locally.
+    function touchStreakDay() {
+        try {
+            const today = new Date().toDateString();
+            const last = localStorage.getItem('pp-academy-last-day');
+            let streak = parseInt(localStorage.getItem('pp-academy-streak') || '0', 10) || 0;
+            if (last !== today) {
+                const y = new Date(); y.setDate(y.getDate() - 1);
+                streak = (last === y.toDateString()) ? streak + 1 : 1;
+                localStorage.setItem('pp-academy-streak', String(streak));
+                localStorage.setItem('pp-academy-last-day', today);
+            }
+            academyState.streakDays = Math.max(streak, 1);
+        } catch (e) {
+            academyState.streakDays = academyState.streakDays || 1;
+        }
+    }
+
+    // XP level ladder — every 150 XP is one league rank
+    function academyRank(xp) {
+        const ranks = ['تازه‌وارد 🌱', 'کاوشگر 🧭', 'دانشمند 🧪', 'استاد جدول 🏅', 'افسانه مندلیف 👑'];
+        return ranks[Math.min(ranks.length - 1, Math.floor((xp || 0) / 150))];
     }
 
     function saveAcademyProgress() {
@@ -657,9 +703,9 @@
 
     function updateHeaderStats() {
         const xpEl = document.getElementById('duo-stat-xp');
-        if (xpEl) xpEl.textContent = `${academyState.xp} XP`;
+        if (xpEl) xpEl.textContent = `${academyState.xp} XP • ${academyRank(academyState.xp)}`;
         const streakEl = document.getElementById('duo-stat-streak');
-        if (streakEl) streakEl.textContent = `${academyState.streakDays} روز`;
+        if (streakEl) streakEl.textContent = `${academyState.streakDays} روز 🔥`;
     }
 
     // Live Animated Blobatar Avatar with Talking & Blinking Eyes (https://blobatar.dev/)
@@ -700,12 +746,17 @@
         `;
     }
 
-    // Mentor interactive dialogue on click
+    // Mentor interactive dialogue on click — rotates through personality quotes
+    // Shared avatar renderer: story mode reuses the live Blobatar mentor
+    // heads via window.renderGuideAvatar(seed, size, state, mentorId).
+    window.renderGuideAvatar = renderLiveAvatar;
     window.onMentorAvatarClick = function(mentorId) {
         const m = MENTORS[mentorId] || MENTORS.mendeleev;
         if (window.SFX && window.SFX.click) window.SFX.click();
+        const pool = (m.quotes && m.quotes.length) ? m.quotes : [m.quote];
+        m._qi = ((m._qi || 0) + 1) % pool.length;
         if (window.showToast) {
-            window.showToast(`💬 ${m.name}`, m.quote, 'info', 3000);
+            window.showToast(`💬 ${m.name}`, pool[m._qi], 'info', 3000);
         }
         const stage = document.querySelector(`.vf-blobatar-stage[data-mentor="${mentorId}"]`);
         if (stage) {
@@ -773,6 +824,23 @@
         let currentUnitId = -1;
         let html = '';
 
+        // Motivation banner — Duolingo-style league header (real streak + rank)
+        const doneCount = ACADEMY_LESSONS.filter((l, i) => i < academyState.unlockedLevel).length;
+        html += `
+        <div class="w-full max-w-md mx-auto my-4 px-4">
+            <div class="p-4 rounded-3xl border-2 border-amber-400/60 bg-amber-400/10 shadow-[0_5px_0_rgba(0,0,0,0.5)] flex items-center justify-between gap-3">
+                <div class="text-right">
+                    <span class="text-[11px] font-black text-amber-300 block">🔥 استریک ${academyState.streakDays} روزه — ادامه بده!</span>
+                    <span class="text-xs font-bold text-white block mt-0.5">${academyRank(academyState.xp)} • ${academyState.xp} XP</span>
+                </div>
+                <div class="text-left shrink-0">
+                    <span class="inline-flex items-center gap-1 text-xs font-black px-3 py-1.5 rounded-xl bg-slate-900 border-2 border-emerald-400/60 text-emerald-300">
+                        ${doneCount} / ${ACADEMY_LESSONS.length} فصل
+                    </span>
+                </div>
+            </div>
+        </div>`;
+
         ACADEMY_LESSONS.forEach((lesson, idx) => {
             const isUnlocked = idx <= academyState.unlockedLevel;
             const isDone = idx < academyState.unlockedLevel;
@@ -784,7 +852,7 @@
                 currentUnitId = lesson.unit;
                 html += `
                 <div class="w-full max-w-md mx-auto my-6 px-4">
-                    <div class="p-4 rounded-3xl border border-slate-700/80 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-xl flex items-center justify-between">
+                    <div class="p-4 rounded-3xl border border-slate-700/80 bg-slate-900 shadow-xl flex items-center justify-between">
                         <div class="text-right">
                             <span class="text-[11px] font-bold text-slate-400 block">${lesson.unitTitle}</span>
                             <h3 class="text-sm font-black text-white mt-0.5">${lesson.unitDesc}</h3>
@@ -886,7 +954,7 @@
             let hHtml = '';
             for (let i = 0; i < 3; i++) {
                 hHtml += `
-                <svg class="w-6 h-6 transition-transform ${i < academyState.hearts ? 'text-rose-500 fill-rose-500 animate-pulse' : 'text-slate-700'}" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="w-7 h-7 transition-transform ${i < academyState.hearts ? 'text-rose-500 fill-rose-500 drop-shadow-[0_2px_0_rgba(0,0,0,0.5)]' : 'text-slate-700 scale-90 opacity-60'}" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
                 `;
@@ -1084,7 +1152,7 @@
             titleEl.textContent = 'آفرین! مکان عنصر را درست گفتی! 🎉';
             descEl.textContent = step.explanation || 'موقعیت عنصر در جدول تثبیت شد.';
 
-            actionBtn.className = 'vibefarsi-shine px-6 py-3 rounded-2xl font-black text-slate-950 text-sm shadow-xl bg-gradient-to-r from-emerald-400 to-teal-300 hover:brightness-110 active:scale-98 cursor-pointer shrink-0';
+            actionBtn.className = 'vibefarsi-shine px-6 py-3 rounded-2xl font-black text-slate-950 text-sm shadow-[0_4px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[4px] bg-emerald-400 hover:bg-emerald-300 cursor-pointer shrink-0 border-2 border-emerald-200 transition-all';
             actionBtn.textContent = 'عالی، مرحله بعد →';
 
             if (window.confetti) {
@@ -1102,7 +1170,7 @@
                 let hhHtml = '';
                 for (let i = 0; i < 3; i++) {
                     hhHtml += `
-                    <svg class="w-6 h-6 transition-transform ${i < academyState.hearts ? 'text-rose-500 fill-rose-500 animate-pulse' : 'text-slate-700'}" viewBox="0 0 24 24" fill="currentColor">
+                    <svg class="w-7 h-7 transition-transform ${i < academyState.hearts ? 'text-rose-500 fill-rose-500 drop-shadow-[0_2px_0_rgba(0,0,0,0.5)]' : 'text-slate-700 scale-90 opacity-60'}" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
                     `;
@@ -1123,7 +1191,7 @@
             titleEl.textContent = 'نادرست بود! به مختصات دقت کن.';
             descEl.textContent = step.explanation || 'به شماره سطر و ستون توجه کنید.';
 
-            actionBtn.className = 'vibefarsi-shine px-6 py-3 rounded-2xl font-black text-white text-sm shadow-xl bg-gradient-to-r from-rose-500 to-red-600 hover:brightness-110 active:scale-98 cursor-pointer shrink-0';
+            actionBtn.className = 'vibefarsi-shine px-6 py-3 rounded-2xl font-black text-white text-sm shadow-[0_4px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[4px] bg-rose-500 hover:bg-rose-400 cursor-pointer shrink-0 border-2 border-rose-300 transition-all';
             actionBtn.textContent = 'فهمیدم، ادامه →';
 
             // Error shake on selected button
@@ -1192,9 +1260,10 @@
             </div>
 
             <h2 class="text-xl md:text-2xl font-black text-white mb-2">فصل فتح شد! 🏆</h2>
-            <p class="text-xs md:text-sm text-slate-300 mb-5 leading-relaxed">
-                تبریک! جایگاه عناصر «${lesson.title}» را با موفقیت در حافظه ذهنی‌ات ثبت کردی.
+            <p class="text-xs md:text-sm text-amber-300 mb-1 font-bold leading-relaxed">
+                «${mentor.quotes ? mentor.quotes[Math.floor(Math.random() * mentor.quotes.length)] : mentor.quote}»
             </p>
+            <p class="text-[11px] text-slate-400 mb-5">— ${mentor.name}</p>
 
             <div class="flex items-center gap-4 mb-6">
                 <div class="flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-sm">
@@ -1208,7 +1277,7 @@
 
             <button type="button"
                 onclick="window.returnToDuoPath()"
-                class="vibefarsi-shine w-full py-4 rounded-2xl font-black text-slate-950 text-base shadow-xl bg-gradient-to-r from-emerald-400 to-teal-300 hover:brightness-110 active:scale-98 cursor-pointer"
+                class="vibefarsi-shine w-full py-4 rounded-2xl font-black text-slate-950 text-base shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] bg-emerald-400 hover:bg-emerald-300 cursor-pointer border-2 border-emerald-200 transition-all"
             >
                 ادامه مسیر فتح جدول →
             </button>
@@ -1229,13 +1298,16 @@
             <div class="mb-4">
                 ${avatarHtml}
             </div>
-            <h2 class="text-xl font-black text-rose-400 mb-2">جان‌های شما تمام شد! 💔</h2>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/40 text-rose-300 font-black text-xs mb-3">
+                <span>💔 ${academyState.xp} XP ذخیره شد • استریک ${academyState.streakDays} روزه حفظه!</span>
+            </div>
+            <h2 class="text-xl font-black text-rose-400 mb-2">جان‌ها تموم شد!</h2>
             <p class="text-xs md:text-sm text-slate-300 mb-6 leading-relaxed">
-                اشکالی نداره دانشمند من! جدول تناوبی با تکرار در ذهن ماندگار می‌شه. دوباره تلاش کن!
+                «${mentor.quote}» — ${mentor.name} کنارت می‌مونه، یه نفس عمیق بکش و دوباره حمله کن!
             </p>
             <button type="button"
                 onclick="window.startAcademyLesson('${academyState.currentLesson.id}')"
-                class="vibefarsi-shine w-full py-3.5 rounded-2xl font-black text-white text-base shadow-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:brightness-110 active:scale-98 cursor-pointer mb-3"
+                class="vibefarsi-shine w-full py-3.5 rounded-2xl font-black text-white text-base shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] bg-cyan-500 hover:bg-cyan-400 cursor-pointer border-2 border-cyan-300 transition-all mb-3"
             >
                 تلاش مجدد ↺
             </button>

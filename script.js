@@ -1647,7 +1647,7 @@ function renderStoryMap() {
                 <span class="font-english text-cyan-300 bg-slate-800 px-2.5 py-0.5 rounded-full border border-slate-700">${doneLevels} / ${totalLevels} (${totalPct}٪)</span>
             </div>
             <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700/50">
-                <div class="h-full rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-cyan-400 transition-all duration-500" style="width: ${totalPct}%"></div>
+                <div class="h-full rounded-full bg-emerald-400 transition-all duration-500" style="width: ${totalPct}%"></div>
             </div>
         </div>
     `;
@@ -1726,16 +1726,19 @@ function renderStoryMap() {
         return `
             <div class="duo-path-wrapper">
                 <!-- Academy Unit Banner -->
-                <div class="duo-unit-banner" style="background: linear-gradient(135deg, ${region.color}22, rgba(15,23,42,0.95)); border-color: ${unlocked ? region.color : '#334155'};">
+                <div class="duo-unit-banner" style="background: #0f172a; border-color: ${unlocked ? region.color : '#334155'};">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg" style="background: ${region.color}33; color: ${region.color}; border: 1.5px solid ${region.color}66;">
-                                ${unlocked ? getIconSvg(regIcon, 'w-6 h-6') : getIconSvg('lock', 'w-6 h-6 text-slate-400')}
+                            <div class="shrink-0 scale-[0.62] origin-center -m-2">
+                                ${(typeof window.renderGuideAvatar === 'function' && unlocked)
+                                    ? window.renderGuideAvatar(region.guideSeed || 'Mendeleev', 84, 'idle', ({ Mendeleev: 'mendeleev', MarieCurie: 'curie', NielsBohr: 'bohr', NeonSpark: 'neon' })[region.guideSeed || 'Mendeleev'] || 'mendeleev')
+                                    : `<div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg" style="background: ${region.color}33; color: ${region.color}; border: 1.5px solid ${region.color}66;">${unlocked ? getIconSvg(regIcon, 'w-6 h-6') : getIconSvg('lock', 'w-6 h-6 text-slate-400')}</div>`}
                             </div>
                             <div>
                                 <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 block">بخش ${ri + 1} از ${storyRegions.length}</span>
                                 <h3 class="font-extrabold text-base md:text-lg text-white" style="color: ${unlocked ? region.color : '#94a3b8'}">${region.name}</h3>
                                 <p class="text-xs text-slate-400 mt-0.5 line-clamp-1">${region.desc}</p>
+                                ${region.guide ? `<p class="text-[11px] text-amber-300/90 font-bold mt-1">🧭 راهنما: ${region.guide} — روش کلیک کن!</p>` : ''}
                             </div>
                         </div>
                         <div class="text-left shrink-0">
@@ -1781,7 +1784,9 @@ window.onLockedLevelClick = function(e) {
 function teachNumsResolved(nums) { return nums || []; }
 
 function resolveQuizNums(qn) {
-    if (qn === '__ALL__') return elementData.filter(e => e.isMainBlock).map(e => e.num);
+    // '__ALL__' = the true final boss: ALL 118 elements, including the
+    // lanthanide / actinide rows (they are NOT isMainBlock).
+    if (qn === '__ALL__') return elementData.map(e => e.num);
     return qn || [];
 }
 
@@ -1873,15 +1878,27 @@ function showLevelIntro(region, level) {
     }).join('');
 
     const regIcon = region.icon || 'atom';
+    const guideSeed = region.guideSeed || 'Mendeleev';
+    const guideId = ({ Mendeleev: 'mendeleev', MarieCurie: 'curie', NielsBohr: 'bohr', NeonSpark: 'neon' })[guideSeed] || 'mendeleev';
+    const guideAvatar = (typeof window.renderGuideAvatar === 'function')
+        ? window.renderGuideAvatar(guideSeed, 84, 'talking', guideId)
+        : `<div class="w-14 h-14 mx-auto mb-2 rounded-2xl flex items-center justify-center shadow-lg" style="background:${region.color}22; color:${region.color}; border:1.5px solid ${region.color}55;">${getIconSvg(regIcon, 'w-8 h-8')}</div>`;
 
     document.getElementById('level-teach-content').innerHTML = `
         <div class="text-center mb-5">
-            <div class="w-14 h-14 mx-auto mb-2 rounded-2xl flex items-center justify-center shadow-lg" style="background:${region.color}22; color:${region.color}; border:1.5px solid ${region.color}55;">
-                ${getIconSvg(regIcon, 'w-8 h-8')}
-            </div>
+            <div class="flex justify-center mb-2">${guideAvatar}</div>
             <h2 class="text-2xl font-extrabold text-white mt-1">${level.name}</h2>
             <p class="text-xs text-purple-300 font-bold mt-0.5">${region.name}</p>
         </div>
+
+        ${region.story ? `
+        <div class="mb-4 p-4 rounded-2xl border-2 bg-slate-900/80 text-right" style="border-color:${region.color}66;">
+            <p class="text-amber-300 font-black text-xs mb-1.5 flex items-center gap-1.5">
+                ${getIconSvg('book-open', 'w-4 h-4 text-amber-400')}
+                <span>🧭 راهنما: ${region.guide || 'مندلیف'} — برای گفتگو روش کلیک کن!</span>
+            </p>
+            <p class="text-xs md:text-sm leading-relaxed text-slate-200">${region.story}</p>
+        </div>` : ''}
 
         ${teachEls.length ? `
         <div class="teach-card mb-4 bg-slate-900/80 p-4 rounded-2xl border border-slate-700/80">
@@ -1905,7 +1922,7 @@ function showLevelIntro(region, level) {
             <span>مرحله مبارزه و مرور! هیچ عنصر جدیدی نیست — هر <b>${resolveQuizNums(level.quizNums).length} عنصر</b> را درست جای‌گذاری کنید!</span>
         </div>`}
 
-        <button id="begin-level-btn" class="w-full bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:from-purple-500 hover:to-fuchsia-400 text-white font-bold py-3.5 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-500/30 mb-2.5 vibefarsi-shine flex items-center justify-center gap-2">
+        <button id="begin-level-btn" class="w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3.5 rounded-2xl transition-all shadow-[0_5px_0_rgba(2,6,23,0.9)] active:shadow-none active:translate-y-[5px] border-2 border-purple-300 mb-2.5 vibefarsi-shine flex items-center justify-center gap-2">
             ${getIconSvg('play', 'w-4 h-4')}
             <span>شروع مرحله</span>
         </button>
@@ -2115,20 +2132,28 @@ function nextElement() {
     }
     
     currentElement = currentPool.pop();
-    
+
+    // Strict mode split: the target box shows EXACTLY ONE identifier and the
+    // helper line NEVER leaks the other one (no name under symbol, no symbol
+    // under name). The helper line instead shows a neutral position hint.
+    const posHint = currentElement.p >= 9
+        ? (currentElement.p === 9 ? 'ردیف لانتانیدها' : 'ردیف اکتینیدها')
+        : `دوره ${currentElement.p}`;
     if (gameMode === 'symbol') {
         targetSymbolEl.textContent = currentElement.sym;
-        targetNameEl.textContent = currentElement.name;
         targetSymbolEl.style.fontSize = '';
         targetSymbolEl.className = 'leading-none font-black text-white';
+        targetSymbolEl.dir = 'ltr';
+        targetNameEl.textContent = posHint;
     } else {
         targetSymbolEl.textContent = currentElement.name;
-        targetNameEl.textContent = currentElement.sym;
         // Dynamic clamp: long Persian names shrink so they never overflow the box
         const nLen = currentElement.name.length;
         const fs = nLen <= 5 ? '2rem' : nLen <= 8 ? '1.6rem' : nLen <= 11 ? '1.3rem' : '1.05rem';
         targetSymbolEl.style.fontSize = fs;
         targetSymbolEl.className = 'leading-snug font-black text-white';
+        targetSymbolEl.dir = 'rtl';
+        targetNameEl.textContent = posHint;
     }
     
     // Add pop animation to target box
@@ -2165,8 +2190,6 @@ function handleCellClick(cell, targetAtomic) {
     
     if (targetAtomic === currentElement.num) {
         // Correct! Snapshot first so later async steps can't lose the target.
-        const doneEl = currentElement;
-
         cell.classList.remove('puzzle-target');
         cell.classList.remove('pre-filled');
         cell.classList.add('filled');
@@ -2177,12 +2200,9 @@ function handleCellClick(cell, targetAtomic) {
         triggerScreenSuccess();
         registerCorrectAnswer(cell);
 
-        // Show brief victory toast with position details
-        const pName = doneEl.p >= 9 ? (doneEl.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${doneEl.p}`;
-        const gName = doneEl.p >= 9 ? 'ردیف پایین' : `ستون ${doneEl.g}`;
-        try {
-            showToast(`✅ عالی!`, `${doneEl.name} (${doneEl.sym}) در ${pName}، ${gName}`, 'info', 1800);
-        } catch (e) {}
+        // Quiet victory (classic behavior): NO toast here — the +score popup
+        // on the cell + screen flash + sound is the whole feedback. No answer
+        // leak, no screen clutter.
 
         // Record progress for the heatmap
         try { recordAnswerResult(targetAtomic, true); } catch (e) {}
@@ -2191,32 +2211,20 @@ function handleCellClick(cell, targetAtomic) {
         updateStats();
         setTimeout(() => { try { nextElement(); } catch (e) {} }, 280);
     } else {
-        // Wrong! Snapshot the target before any state change.
-        const missedEl = currentElement;
+        // Wrong! Quiet miss (classic behavior): red shake on the cell,
+        // -5 popup, danger flash, heart loss, sound — but NEVER reveal the
+        // target's name/symbol/position or the clicked cell's identity.
+        const missedNum = currentElement.num;
 
         cell.classList.add('wrong-guess');
         setTimeout(() => cell.classList.remove('wrong-guess'), 550);
 
         triggerScreenDanger();
-        try { recordAnswerResult(missedEl.num, false); } catch (e) {}
+        try { recordAnswerResult(missedNum, false); } catch (e) {}
         registerWrongAnswer(cell); // includes penalty & SFX
-
-        const clickedEl = elementData.find(e => e.num == targetAtomic);
-        const clickedName = clickedEl ? `${clickedEl.name} (${clickedEl.sym})` : 'یک خانه دیگر';
-        const targetP = missedEl.p >= 9 ? (missedEl.p === 9 ? 'لانتانیدها' : 'اکتینیدها') : `سطر ${missedEl.p}`;
-        const targetG = missedEl.p >= 9 ? 'ردیف پایین' : `ستون ${missedEl.g}`;
 
         // Decrement FIRST so hearts can never desync even if feedback fails
         lives--;
-
-        try {
-            showToast(
-                `❌ اشتباه بود!`,
-                `این خانه جای ${clickedName} است! جایگاه ${missedEl.name} (${missedEl.sym}): ${targetP}، ${targetG}`,
-                'danger',
-                3500
-            );
-        } catch (e) {}
 
         updateStats(); // render AFTER decrementing so hearts stay in sync
 
